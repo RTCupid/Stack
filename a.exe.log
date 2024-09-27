@@ -130,3 +130,143 @@ Run file:	C:\Users\artym\Desktop\новые коды\stack\Stack\a.exe
 Directory:	C:\Users\artym\Desktop\новые коды\stack\Stack
 
 --------------------------------------------------
+
+--------------------------------------------------
+TXLib предупреждает:
+
+Программа: C:\Users\artym\Desktop\новые коды\stack\Stack\a.exe,
+
+ВНЕЗАПНО: Нарушение доступа к памяти.
+
+#1: Исключение EXCEPTION_ACCESS_VIOLATION (0xC0000005) при выполнении кода по адресу 0x0041C8A9. Попытка прочесть данные по адресу NULL в модуле C:\Users\artym\Desktop\новые коды\stack\Stack\a.exe. Спасибо _txVectoredExceptionHandler(), что сообщил. Люблю его <3
+
+#1: TXLib [Ver: 00173a, Rev: 173, Date: 2024-06-23 22:37:05 +0400], Instance: 0x004F42FC (32-bit), Flags: Cmdre0, Thread: 0x3808 (Main). 
+
+--------------------------------------------------
+Стек вызовов:
+
+
+
+--------------------------------------------------
+Developed with:
+
+The Dumb Artist Library (TX Library)
+TXLib [Ver: 00173a, Rev: 173, Date: 2024-06-23 22:37:05 +0400]
+Copyright (C) Ded (Ilya Dedinsky, http://txlib.ru) <mail@txlib.ru>
+See license on: http://txlib.ru
+
+TXLib file:	c:\users\artym\desktop\новая папка\codeblocks\mingw\include\txlib.h
+Compiled:	Sep 27 2024 12:16:40, GNU g++ 4.8.1, std=201103L, MinGW Runtime 3.20, 32-bit, Debug
+Started:	Sep 27 2024 12:17:03
+
+Run file:	C:\Users\artym\Desktop\новые коды\stack\Stack\a.exe
+Directory:	C:\Users\artym\Desktop\новые коды\stack\Stack
+
+--------------------------------------------------
+
+--------------------------------------------------
+TXLib соболезнует...
+
+Программа: C:\Users\artym\Desktop\новые коды\stack\Stack\a.exe,
+
+ВНЕЗАПНО: signal (11, 0x00): SIGSEGV: Доступ по неверному указателю. Ставьте ассерты! 
+
+Нарушение доступа к памяти.
+
+#1: Исключение EXCEPTION_ACCESS_VIOLATION (0xC0000005) при выполнении кода по адресу 0x0041C8A9. Попытка прочесть данные по адресу NULL в модуле C:\Users\artym\Desktop\новые коды\stack\Stack\a.exe. Спасибо _txVectoredExceptionHandler(), что сообщил. Люблю его <3
+
+С помощью функции signal() вы можете сами обработать эту ошибку.
+
+#2: TXLib [Ver: 00173a, Rev: 173, Date: 2024-06-23 22:37:05 +0400], Instance: 0x004F42FC (32-bit), Flags: Cmdre0, Thread: 0x3808 (Main). 
+
+--------------------------------------------------
+Стек вызовов:
+
+
+
+--------------------------------------------------
+Developed with:
+
+The Dumb Artist Library (TX Library)
+TXLib [Ver: 00173a, Rev: 173, Date: 2024-06-23 22:37:05 +0400]
+Copyright (C) Ded (Ilya Dedinsky, http://txlib.ru) <mail@txlib.ru>
+See license on: http://txlib.ru
+
+TXLib file:	c:\users\artym\desktop\новая папка\codeblocks\mingw\include\txlib.h
+Compiled:	Sep 27 2024 12:16:40, GNU g++ 4.8.1, std=201103L, MinGW Runtime 3.20, 32-bit, Debug
+Started:	Sep 27 2024 12:17:03
+
+Run file:	C:\Users\artym\Desktop\новые коды\stack\Stack\a.exe
+Directory:	C:\Users\artym\Desktop\новые коды\stack\Stack
+
+--------------------------------------------------
+
+--------------------------------------------------
+TXLib предупреждает:
+
+Программа: C:\Users\artym\Desktop\новые коды\stack\Stack\a.exe,
+
+ВНЕЗАПНО: Нарушение доступа к памяти.
+
+#1: Исключение EXCEPTION_ACCESS_VIOLATION (0xC0000005) при выполнении кода по адресу 0x0041C8A9. Попытка прочесть данные по адресу NULL в модуле C:\Users\artym\Desktop\новые коды\stack\Stack\a.exe. Спасибо _txVectoredExceptionHandler(), что сообщил. Люблю его <3
+
+#1: TXLib [Ver: 00173a, Rev: 173, Date: 2024-06-23 22:37:05 +0400], Instance: 0x004F42FC (32-bit), Flags: Cmdre0, Thread: 0x1764 (Main). 
+
+--------------------------------------------------
+Стек вызовов:
+
+
+
+--------------------------------------------------
+Developed with:
+
+The Dumb Artist Library (TX Library)
+TXLib [Ver: 00173a, Rev: 173, Date: 2024-06-23 22:37:05 +0400]
+Copyright (C) Ded (Ilya Dedinsky, http://txlib.ru) <mail@txlib.ru>
+See license on: http://txlib.ru
+
+TXLib file:	c:\users\artym\desktop\новая папка\codeblocks\mingw\include\txlib.h
+Compiled:	Sep 27 2024 12:18:48, GNU g++ 4.8.1, std=201103L, MinGW Runtime 3.20, 32-bit, Debug
+Started:	Sep 27 2024 12:19:10
+
+Run file:	C:\Users\artym\Desktop\новые коды\stack\Stack\a.exe
+Directory:	C:\Users\artym\Desktop\новые коды\stack\Stack
+
+--------------------------------------------------
+
+--------------------------------------------------
+TXLib соболезнует...
+
+Программа: C:\Users\artym\Desktop\новые коды\stack\Stack\a.exe,
+
+ВНЕЗАПНО: signal (11, 0x00): SIGSEGV: Доступ по неверному указателю. Ставьте ассерты! 
+
+Нарушение доступа к памяти.
+
+#1: Исключение EXCEPTION_ACCESS_VIOLATION (0xC0000005) при выполнении кода по адресу 0x0041C8A9. Попытка прочесть данные по адресу NULL в модуле C:\Users\artym\Desktop\новые коды\stack\Stack\a.exe. Спасибо _txVectoredExceptionHandler(), что сообщил. Люблю его <3
+
+С помощью функции signal() вы можете сами обработать эту ошибку.
+
+#2: TXLib [Ver: 00173a, Rev: 173, Date: 2024-06-23 22:37:05 +0400], Instance: 0x004F42FC (32-bit), Flags: Cmdre0, Thread: 0x1764 (Main). 
+
+--------------------------------------------------
+Стек вызовов:
+
+
+
+--------------------------------------------------
+Developed with:
+
+The Dumb Artist Library (TX Library)
+TXLib [Ver: 00173a, Rev: 173, Date: 2024-06-23 22:37:05 +0400]
+Copyright (C) Ded (Ilya Dedinsky, http://txlib.ru) <mail@txlib.ru>
+See license on: http://txlib.ru
+
+TXLib file:	c:\users\artym\desktop\новая папка\codeblocks\mingw\include\txlib.h
+Compiled:	Sep 27 2024 12:18:48, GNU g++ 4.8.1, std=201103L, MinGW Runtime 3.20, 32-bit, Debug
+Started:	Sep 27 2024 12:19:10
+
+Run file:	C:\Users\artym\Desktop\новые коды\stack\Stack\a.exe
+Directory:	C:\Users\artym\Desktop\новые коды\stack\Stack
+
+--------------------------------------------------

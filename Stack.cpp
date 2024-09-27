@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include "TXLib.h"
+#include <assert.h>
+//#include "TXLib.h"
 
 typedef double stack_elem_t;
 
@@ -24,7 +25,7 @@ int StackDtor (stack_t* stk);
 int main ()
     {
     printf ("# Program for Solve Square Equation\n");
-    printf ("# (c) RTCupid, 2024\n");
+    printf ("# (c) RTCupid, 2024\n\n");
 
     struct stack_t stk = {NULL,
                           0,
@@ -43,11 +44,12 @@ int main ()
     elemFromStack = StackPop (&stk);
 
     DBG printf ("After StackPop: stk->size = %d\n", stk.size);
-    DBG printf ("elemFromStack = %lf\n", elemFromStack);
+    DBG printf ("elemFromStack = %lf\n\n", elemFromStack);
 
     StackDtor (&stk);
 
-    DBG printf ("After destroy: stk.data[0] = %lf", stk.data[0]);
+    assert (stk.data == NULL);
+    DBG printf ("Stack is destroyed\n\n");
 
     printf ("#End of programm");
     return 0;
@@ -96,8 +98,6 @@ int StackPush (stack_t* stk, stack_elem_t elem)
         }
 
     stk->data[stk->size] = elem;
-
-    //assert (stk->data != NULL);
 
     stk->size++;
 
