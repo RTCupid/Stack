@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
+#include "TXLib.h"
 
 typedef double stack_elem_t;
 
@@ -15,30 +17,39 @@ int StackCtor (stack_t* stk, int startSize);
 
 int StackPush (stack_t* stk, stack_elem_t elem);
 
+stack_elem_t StackPop (stack_t* stk);
+
+int StackDtor (stack_t* stk);
+
 int main ()
     {
+    printf ("# Program for Solve Square Equation\n");
+    printf ("# (c) RTCupid, 2024\n");
+
     struct stack_t stk = {NULL,
                           0,
                           0};
 
-    if (!StackCtor (&stk, 5))
-        {
-        printf ("ERROR: Error of stack construction");
-        return -1;
-        }
+    StackCtor (&stk, 5);
 
-    if (!StackPush (&stk, 20))
-        {
-        printf ("ERROR: Error of push to stack");
-        return -1;
-        }
+    StackPush (&stk, 20);
 
-    if (!StackPush (&stk, 30))
-        {
-        printf ("ERROR: Error of push to stack");
-        return -1;
-        }
+    StackPush (&stk, 30);
 
+    double elemFromStack = 0;
+
+    DBG printf ("Before StackPop: stk->size = %d\n", stk.size);
+
+    elemFromStack = StackPop (&stk);
+
+    DBG printf ("After StackPop: stk->size = %d\n", stk.size);
+    DBG printf ("elemFromStack = %lf\n", elemFromStack);
+
+    StackDtor (&stk);
+
+    DBG printf ("After destroy: stk.data[0] = %lf", stk.data[0]);
+
+    printf ("#End of programm");
     return 0;
     }
 
@@ -86,9 +97,26 @@ int StackPush (stack_t* stk, stack_elem_t elem)
 
     stk->data[stk->size] = elem;
 
-    DBG printf ("stk->data[%d] = %lf\n", stk->size, stk->data[stk->size]);
+    //assert (stk->data != NULL);
 
     stk->size++;
 
     return 1;
+    }
+
+//Pop elem from stack..........................................................
+
+stack_elem_t StackPop (stack_t* stk)
+    {
+    stk->size--;
+    return stk->data[stk->size];
+    }
+
+//Destroy stack................................................................
+
+int StackDtor (stack_t* stk)
+    {
+    free (stk->data);
+    stk->data = NULL;
+    return 0;
     }
