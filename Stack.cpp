@@ -15,40 +15,25 @@ int main ()
     stack_elem_t elem_from_stack = NOT_AN_ELEMENT;
 
     err_t error = StackCtor (&stk, 5);
-    if (error)
-        {
-        printf("Stack error: %s\n", StackErrorToString(error));
-        }
+    PrintErrorStack (error);
 
     error = StackPush (&stk, 20);
-    if (error)
-        {
-        printf("Stack error: %s\n", StackErrorToString(error));
-        }
+    PrintErrorStack (error);
 
     error = StackPush (&stk, 30);
-    if (error)
-        {
-        printf("Stack error: %s\n", StackErrorToString(error));
-        }
+    PrintErrorStack (error);
 
 
     DBG printf ("Before StackPop: stk->size = %d\n", stk.size);
 
     error = StackPop (&stk, &elem_from_stack);
-    if (error)
-        {
-        printf("Stack error: %s\n", StackErrorToString(error));
-        }
+    PrintErrorStack (error);
 
     DBG printf ("After StackPop: stk->size = %d\n", stk.size);
     DBG printf ("elemFromStack = %lf\n\n", elem_from_stack);
 
     error = StackDtor (&stk);
-    if (error)
-        {
-        printf("Stack error: %s\n", StackErrorToString(error));
-        }
+    PrintErrorStack (error);
 
     printf ("#Stack is destroyed\n");
 
@@ -168,3 +153,11 @@ err_t Veryficator (stack_t* stk)
         return STK_OK;
     }
 
+int PrintErrorStack (err_t error)
+    {
+    if (error)
+        {
+        printf("Stack error: %s\n", StackErrorToString(error));
+        }
+    return 1;
+    }

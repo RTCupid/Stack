@@ -36,3 +36,5 @@ err_t StackDtor (stack_t* stk);
 err_t Veryficator (stack_t* stk);
 
 const char* StackErrorToString(err_t error);
+
+int PrintErrorStack (err_t error);
