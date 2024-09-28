@@ -11,12 +11,10 @@ enum err_t
     {                                                                          // enum err_t
     STK_OK = 0,
     STK_OUT_OF_MEMORY = 1,                                                     // not enough memory to create stack data
-    STK_BAD_STACK = 2,
-    STK_BAD_STACK_DATA = 3,
-    STK_REALLOC_FAILED = 4,
-    STK_STACK_NOT_EXSIST = 5,
-    STK_CAPACITY_NOT_EXSIST = 6,
-    STK_SIZE_LARGER_CAPACITY = 7,
+    STK_REALLOC_FAILED,
+    STK_STACK_NOT_EXSIST,
+    STK_CAPACITY_NOT_EXSIST,
+    STK_SIZE_LARGER_CAPACITY,
     STK_EMPTY_STACK};
 
 const stack_elem_t NOT_AN_ELEMENT = NAN;                                       // = NAN for stack_elem_t = double

@@ -20,21 +20,37 @@ int main ()
         printf("Stack error: %s\n", StackErrorToString(error));
         }
 
-    StackPush (&stk, 20);
+    error = StackPush (&stk, 20);
+    if (error)
+        {
+        printf("Stack error: %s\n", StackErrorToString(error));
+        }
 
-    StackPush (&stk, 30);
+    error = StackPush (&stk, 30);
+    if (error)
+        {
+        printf("Stack error: %s\n", StackErrorToString(error));
+        }
 
 
     DBG printf ("Before StackPop: stk->size = %d\n", stk.size);
 
-    StackPop (&stk, &elem_from_stack);
+    error = StackPop (&stk, &elem_from_stack);
+    if (error)
+        {
+        printf("Stack error: %s\n", StackErrorToString(error));
+        }
 
     DBG printf ("After StackPop: stk->size = %d\n", stk.size);
     DBG printf ("elemFromStack = %lf\n\n", elem_from_stack);
 
-    StackDtor (&stk);
+    error = StackDtor (&stk);
+    if (error)
+        {
+        printf("Stack error: %s\n", StackErrorToString(error));
+        }
 
-    DBG printf ("#Stack is destroyed\n");
+    printf ("#Stack is destroyed\n");
 
     printf ("#End of programm");
     return 0;
@@ -123,10 +139,6 @@ const char* StackErrorToString(err_t error)
         case STK_OK: return "OK";
             break;
         case STK_OUT_OF_MEMORY: return "STK OUT OF MEMORY";
-            break;
-        case STK_BAD_STACK: return "BAD STACK";
-            break;
-        case STK_BAD_STACK_DATA: return "BAD STACK DATA";
             break;
         case STK_REALLOC_FAILED: return "REALLOC FAILED";
             break;
