@@ -30,12 +30,11 @@ int main ()
     StackPop (&stk, &elem_from_stack);
 
     DBG printf ("After StackPop: stk->size = %d\n", stk.size);
-    DBG printf ("elemFromStack = %lf\n\n", elemFromStack);
+    DBG printf ("elemFromStack = %lf\n\n", elem_from_stack);
 
     StackDtor (&stk);
 
-    assert (stk.data == NULL);
-    DBG printf ("Stack is destroyed\n\n");
+    DBG printf ("#Stack is destroyed\n");
 
     printf ("#End of programm");
     return 0;
@@ -85,6 +84,8 @@ err_t StackPush (stack_t* stk, stack_elem_t elem)
 
     stk->data[stk->size] = elem;
 
+    DBG printf ("stk->data[%d] = %lf\n\n", stk->size, stk->data[stk->size]);
+
     stk->size++;
 
     return STK_OK;
@@ -92,17 +93,18 @@ err_t StackPush (stack_t* stk, stack_elem_t elem)
 
 //Pop elem from stack..........................................................
 
-err_t StackPop (stack_t* stk)
+err_t StackPop (stack_t* stk, stack_elem_t* elem_from_stack)
     {
-    err_t error = Veryficator (stk)
+    err_t error = Veryficator (stk);
     if (error)
         return error;
     if (stk->size == 0)
         return STK_EMPTY_STACK;
 
     stk->size--;
-    elem_from_stack = stk->data[stk->size];
+    *elem_from_stack = stk->data[stk->size];
 
+    return STK_OK;
     }
 
 //Destroy stack................................................................
@@ -111,27 +113,39 @@ err_t StackDtor (stack_t* stk)
     {
     free (stk->data);
     stk->data = NULL;
-    return 0;
+    return STK_OK;
     }
 
 const char* StackErrorToString(err_t error)
     {
     switch (error)
-    case STK_OK: return "OK";
-                 break;
-    case STK_OUT_OF_MEMORY: return "STK OUT OF MEMORY";
-    case STK_BAD_STACK: return "BAD STACK";
-    case STK_BAD_STACK_DATA,
-    case STK_REALLOC_FAILED,
-    case STK_NOT_EXSIST,
-    case STK_CAPACITY_NOT_EXSIST,
-    case STK_SIZE_LARGER_CAPACITY
+        {
+        case STK_OK: return "OK";
+            break;
+        case STK_OUT_OF_MEMORY: return "STK OUT OF MEMORY";
+            break;
+        case STK_BAD_STACK: return "BAD STACK";
+            break;
+        case STK_BAD_STACK_DATA: return "BAD STACK DATA";
+            break;
+        case STK_REALLOC_FAILED: return "REALLOC FAILED";
+            break;
+        case STK_STACK_NOT_EXSIST: return "STACK NOT EXSIST";
+            break;
+        case STK_CAPACITY_NOT_EXSIST: return "CAPACITY NOT EXSIST";
+            break;
+        case STK_SIZE_LARGER_CAPACITY: return "SIZE LARGER THAN CAPACITY";
+            break;
+        case STK_EMPTY_STACK: return "EMPTY STACK";
+            break;
+        default: return "UNCNOWN ERROR";
+        }
     }
 
-err_t Veryficator (stak_t* stk)
+err_t Veryficator (stack_t* stk)
     {
-    if (*stk == NULL)
-        return STK_NOT_EXSIST;
+    if (stk == NULL)
+        return STK_STACK_NOT_EXSIST;
     else if (stk->data == NULL)
         return STK_OUT_OF_MEMORY;
     else if (stk->capacity == 0)
