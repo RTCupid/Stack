@@ -5,9 +5,15 @@ int main ()
     printf ("# Program for Solve Square Equation\n");
     printf ("# (c) RTCupid, 2024\n\n");
 
-    struct stack_t stk = {NULL,
+    struct stack_t stk = {0,
+                          NULL,
+                          0,
                           0,
                           0};
+
+    stk.canary_start_stk = (long long)((uint64_t)(&stk) ^ 0x0BEDDEDA);
+    printf ("(uint64_t)(&stk) = <%llu>\n", (uint64_t)(&stk));
+    printf ("stk.canary_start_stk = <%llu>\n", stk.canary_start_stk);
 
     stack_elem_t elem_from_stack = NOT_AN_ELEMENT;
 

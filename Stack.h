@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <assert.h>
+#include <cstdint>
 
 #include "Config.h"
 
@@ -20,9 +21,11 @@ const stack_elem_t NOT_AN_ELEMENT = NAN;                                       /
 
 const double startElem = 10;
 
-struct stack_t {stack_elem_t* data;
+struct stack_t {uint64_t canary_start_stk;
+                stack_elem_t* data;
                 int size;
-                int capacity;};
+                int capacity;
+                uint64_t canary_end_stk;};
 
 err_t StackCtor (stack_t* stk, int startSize);
 
