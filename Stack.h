@@ -1,11 +1,10 @@
+//#include "TXLib.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
 #include <assert.h>
 
-typedef double stack_elem_t;                                                   // type elements in stack
-
-#define DBG if(1)
+#include "Config.h"
 
 enum err_t
     {                                                                          // enum err_t

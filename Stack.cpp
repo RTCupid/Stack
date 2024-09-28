@@ -1,7 +1,4 @@
-//#include "TXLib.h"
-
 #include "Stack.h"
-
 
 int main ()
     {
