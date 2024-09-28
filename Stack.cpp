@@ -23,13 +23,14 @@ int main ()
     error = StackPush (&stk, 30);
     PrintErrorStack (error);
 
-
     DBG printf ("Before StackPop: stk->size = %d\n", stk.size);
+    error = StackPop (&stk, &elem_from_stack);
+    PrintErrorStack (error);
+    DBG printf ("After StackPop: stk->size = %d\n", stk.size);
+    DBG printf ("elemFromStack = %lf\n\n", elem_from_stack);
 
     error = StackPop (&stk, &elem_from_stack);
     PrintErrorStack (error);
-
-    DBG printf ("After StackPop: stk->size = %d\n", stk.size);
     DBG printf ("elemFromStack = %lf\n\n", elem_from_stack);
 
     error = StackDtor (&stk);
