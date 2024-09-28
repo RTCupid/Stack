@@ -33,7 +33,7 @@ err_t StackPop (stack_t* stk, stack_elem_t* elem_from_stack);
 
 err_t StackDtor (stack_t* stk);
 
-err_t Veryficator (stack_t* stk);
+err_t Veryficator (stack_t stk);
 
 const char* StackErrorToString(err_t error);
 
