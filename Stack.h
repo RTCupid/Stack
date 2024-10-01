@@ -23,6 +23,7 @@ const stack_elem_t NOT_AN_ELEMENT = NAN;                                       /
 const double startElem = 10;
 
 struct stack_t {uint64_t chicken_start_stk;
+                stack_elem_t* DATA;
                 stack_elem_t* buffer;
                 int size;
                 int capacity;

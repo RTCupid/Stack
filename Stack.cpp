@@ -11,12 +11,14 @@ int main ()
                           0,
                           0};
 
-    CookChicken (&stk);                                                        // make canary (or chicken)
-
     stack_elem_t elem_from_stack = NOT_AN_ELEMENT;
 
     err_t error = StackCtor (&stk, 5);
     PrintErrorStack (error);
+    error = Veryficator (stk);
+    PrintErrorStack (error);
+
+    CookChicken (&stk);                                                        // make canary (or chicken)
     error = Veryficator (stk);
     PrintErrorStack (error);
 
@@ -48,6 +50,11 @@ int main ()
 
     DBG printf ("elemFromStack = %lf\n\n", elem_from_stack);
 
+    error = StackPop (&stk, &elem_from_stack);
+    PrintErrorStack (error);
+    error = Veryficator (stk);
+    PrintErrorStack (error);
+
     error = StackDtor (&stk);
     PrintErrorStack (error);
 
@@ -61,12 +68,13 @@ int main ()
 
 err_t StackCtor (stack_t* stk, int startCapacity)
     {
-    stk->buffer = (stack_elem_t*)calloc (startCapacity, sizeof (stack_elem_t));
-    if (stk->buffer == NULL)
+    stk->DATA = (stack_elem_t*)calloc (startCapacity + 2, sizeof (stack_elem_t));
+    if (stk->DATA == NULL)
         {
-        printf ("stk->data = NULL");
         return STK_CALLOC_FAILED;
         }
+
+    stk->buffer = (stack_elem_t*)((char*)stk->DATA + 1 * sizeof (stack_elem_t));
     DBG printf ("Start: stk->buffer = %p\n", stk->buffer);
 
     stk->size = 0;
@@ -89,7 +97,6 @@ err_t StackPush (stack_t* stk, stack_elem_t elem)
         stk->buffer = (stack_elem_t*)realloc (stk->buffer, stk->size * 2 * sizeof (stack_elem_t));   //sizeof (est)
         if (stk->buffer == NULL)
             {
-            printf ("ERROR: in StackPush realloc return 'NULL'\n");
             return STK_REALLOC_FAILED;
             }
         }
@@ -128,14 +135,33 @@ err_t StackDtor (stack_t* stk)
     return STK_OK;
     }
 
+//.............................................................................
+
 err_t CookChicken (stack_t* stk)
     {
     stk->chicken_start_stk = ((uint64_t)(stk) ^ 0x0BEDDEDA);
-    printf ("(uint64_t)(&stk) = <%llu>\n", (uint64_t)(stk));
-    printf ("stk.chicken_start_stk = <%llu>\n", stk->chicken_start_stk);
+    DBG printf ("(uint64_t)(&stk) = <%llu>\n", (uint64_t)(stk));
+    DBG printf ("&stk = <%p>\n", stk);
+    DBG printf ("stk.chicken_start_stk = <%llu>\n", stk->chicken_start_stk);
 
     stk->chicken_end_stk  = ((uint64_t)(stk) ^ 0xDEDDEDDED);
-    printf ("stk.chicken_end_stk = <%llu>\n", stk->chicken_start_stk);
+    DBG printf ("stk.chicken_end_stk = <%llu>\n", stk->chicken_start_stk);
+    err_t error = Veryficator (*stk);
+    if (error)
+        return error;
+
+    *(stk->DATA) = 0x0BEDDEDA;
+    error = Veryficator (*stk);
+    if (error)
+        return error;
+
+    *(stk->DATA + stk->capacity) = 0xDEDDEDDED;
+    error = Veryficator (*stk);
+    if (error)
+        return error;
+
+    printf ("start chicken buffer = <%llu>\n", *(stk->DATA));
+    printf (" end  chicken buffer = <%llu>\n", *(stk->DATA + stk->capacity));
 
     return STK_OK;
     }
