@@ -50,11 +50,6 @@ int main ()
 
     DBG printf ("elemFromStack = %lf\n\n", elem_from_stack);
 
-    error = StackPop (&stk, &elem_from_stack);
-    PrintErrorStack (error);
-    error = Veryficator (stk);
-    PrintErrorStack (error);
-
     error = StackDtor (&stk);
     PrintErrorStack (error);
 
@@ -73,15 +68,16 @@ err_t StackCtor (stack_t* stk, int startCapacity)
         {
         return STK_CALLOC_FAILED;
         }
+    DBG printf ("Start: stk->DATA   = <%p>\n", stk->DATA);
 
     stk->buffer = (stack_elem_t*)((char*)stk->DATA + 1 * sizeof (stack_elem_t));
-    DBG printf ("Start: stk->buffer = %p\n", stk->buffer);
+    DBG printf ("Start: stk->buffer = <%p>\n", stk->buffer);
 
     stk->size = 0;
     DBG printf ("Start: stk->size = %d\n", stk->size);
 
     stk->capacity = startCapacity;
-    DBG printf ("Start: stk->capacity = %d\n", stk->capacity);
+    DBG printf ("Start: stk->capacity = %d\n\n", stk->capacity);
 
     return STK_OK;
     }
@@ -130,7 +126,8 @@ err_t StackPop (stack_t* stk, stack_elem_t* elem_from_stack)
 
 err_t StackDtor (stack_t* stk)
     {
-    free (stk->buffer);
+    free (stk->DATA);
+    stk->DATA = NULL;
     stk->buffer = NULL;
     return STK_OK;
     }
@@ -145,7 +142,7 @@ err_t CookChicken (stack_t* stk)
     DBG printf ("stk.chicken_start_stk = <%llu>\n", stk->chicken_start_stk);
 
     stk->chicken_end_stk  = ((uint64_t)(stk) ^ 0xDEDDEDDED);
-    DBG printf ("stk.chicken_end_stk = <%llu>\n", stk->chicken_start_stk);
+    DBG printf ("stk.chicken_end_stk = <%llu>\n\n", stk->chicken_start_stk);
     err_t error = Veryficator (*stk);
     if (error)
         return error;
@@ -160,8 +157,10 @@ err_t CookChicken (stack_t* stk)
     if (error)
         return error;
 
-    printf ("start chicken buffer = <%llu>\n", *(stk->DATA));
-    printf (" end  chicken buffer = <%llu>\n", *(stk->DATA + stk->capacity));
+    DBG printf ("&start chicken buffer = <%p>\n", stk->DATA);
+    DBG printf (" start chicken buffer = <%llu>\n\n", *(stk->DATA));
+    DBG printf (" &end  chicken buffer = <%p>\n", stk->DATA + stk->capacity);
+    DBG printf ("  end  chicken buffer = <%llu>\n\n", *(stk->DATA + stk->capacity));
 
     return STK_OK;
     }
