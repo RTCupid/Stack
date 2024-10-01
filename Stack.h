@@ -10,7 +10,8 @@
 enum err_t
     {                                                                          // enum err_t
     STK_OK = 0,
-    STK_OUT_OF_MEMORY = 1,                                                     // not enough memory to create stack data
+    STK_CALLOC_FAILED = 1,
+    STK_BUFFER_NOT_EXSIST,                                                     // not enough memory to create stack data
     STK_REALLOC_FAILED,
     STK_STACK_NOT_EXSIST,
     STK_CAPACITY_NOT_EXSIST,
@@ -21,11 +22,13 @@ const stack_elem_t NOT_AN_ELEMENT = NAN;                                       /
 
 const double startElem = 10;
 
-struct stack_t {uint64_t canary_start_stk;
-                stack_elem_t* data;
+struct stack_t {uint64_t chicken_start_stk;
+                stack_elem_t* buffer;
                 int size;
                 int capacity;
-                uint64_t canary_end_stk;};
+                uint64_t chicken_end_stk;};
+
+err_t CookChicken (stack_t* stk);
 
 err_t StackCtor (stack_t* stk, int startSize);
 
