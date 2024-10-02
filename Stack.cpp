@@ -113,11 +113,12 @@ err_t StackPush (stack_t* stk, stack_elem_t elem)
 
     if (stk->size == stk->capacity)
         {
-        stk->buffer = (stack_elem_t*)realloc (stk->buffer, stk->size * 2 * sizeof (stack_elem_t));   //sizeof (est)
-        if (stk->buffer == NULL)
+        stk->DATA = (stack_elem_t*)realloc (stk->DATA, stk->capacity * 2 * sizeof (stack_elem_t));   //sizeof (est)
+        if (stk->DATA == NULL)
             {
             return STK_REALLOC_FAILED;
             }
+        stk->capacity *= 2;
         }
 
     stk->buffer[stk->size] = elem;
