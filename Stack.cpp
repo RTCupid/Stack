@@ -66,8 +66,10 @@ err_t StackCtor (stack_t* stk, int startCapacity)
     stk->capacity = startCapacity;
     DBG printf ("Start: stk->capacity = %d\n\n", stk->capacity);
 
-    CookChicken (stk);                                                         // make canary (or chicken)
-    err_t error = Veryficator (stk);
+    err_t error = CookChicken (stk);                                           // make canary (or chicken)
+    if (error)
+        return error;
+    error = Veryficator (stk);
     if (error)
         return error;
 
@@ -113,12 +115,16 @@ err_t StackPush (stack_t* stk, stack_elem_t elem)
 
     if (stk->size == stk->capacity)
         {
-        stk->DATA = (stack_elem_t*)realloc (stk->DATA, stk->capacity * 2 * sizeof (stack_elem_t));   //sizeof (est)
+        stk->DATA = (stack_elem_t*)realloc (stk->DATA, (stk->capacity * 2 + 2) * sizeof (stack_elem_t));   //sizeof (est)
         if (stk->DATA == NULL)
             {
             return STK_REALLOC_FAILED;
             }
         stk->capacity *= 2;
+
+        error = CookChicken (stk);                                           // make canary (or chicken)
+        if (error)
+            return error;
         }
 
     stk->buffer[stk->size] = elem;
