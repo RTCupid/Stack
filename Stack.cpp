@@ -15,19 +15,13 @@ int main ()
 
     err_t error = StackCtor (&stk, 5);
     PrintErrorStack (error, "StackCtor");
-    error = Veryficator (&stk);
-    PrintErrorStack (error, "Verificator after StackCtor");
+
 
     error = StackPush (&stk, 20);
     PrintErrorStack (error, "StackPush");
-    error = Veryficator (&stk);
-    PrintErrorStack (error, "Verificator after StackPush");
 
     error = StackPush (&stk, 30);
     PrintErrorStack (error, "StackPush");
-    error = Veryficator (&stk);
-    PrintErrorStack (error, "Verificator after StackPush");
-
 
     DBG printf ("Before StackPop: stk->size = %d\n", stk.size);
 
@@ -40,8 +34,6 @@ int main ()
 
     error = StackPop (&stk, &elem_from_stack);
     PrintErrorStack (error, "StackPop");
-    error = Veryficator (&stk);
-    PrintErrorStack (error, "Verificator after StackPop");
 
     DBG printf ("elemFromStack = %lf\n\n", elem_from_stack);
 
@@ -55,7 +47,7 @@ int main ()
     }
 
 // make stack..................................................................
-
+[[nodiscard]]
 err_t StackCtor (stack_t* stk, int startCapacity)
     {
     stk->DATA = (stack_elem_t*)calloc (startCapacity + 2, sizeof (stack_elem_t));
@@ -96,12 +88,12 @@ err_t CookChicken (stack_t* stk)
 
     *((uint64_t*)(stk->DATA)) = (uint64_t)(stk) ^ 0x0BEDDEDA0BEDDEDA;
 
-    *((uint64_t*)(stk->DATA + stk->capacity)) = (uint64_t)(stk) ^ 0xDEDDEDDEDDEDDEDD;
+    *((uint64_t*)(stk->DATA + stk->capacity + 1)) = (uint64_t)(stk) ^ 0xDEDDEDDEDDEDDEDD;
 
     DBG printf ("&start chicken buffer = <%p>\n", stk->DATA);
     DBG printf (" start chicken buffer = <%llx>\n\n", *((uint64_t*)(stk->DATA)));
-    DBG printf (" &end  chicken buffer = <%p>\n", stk->DATA + stk->capacity);
-    DBG printf ("  end  chicken buffer = <%llx>\n\n", *((uint64_t*)stk->DATA + stk->capacity));
+    DBG printf (" &end  chicken buffer = <%p>\n", stk->DATA + stk->capacity + 1);
+    DBG printf ("  end  chicken buffer = <%llx>\n\n", *((uint64_t*)stk->DATA + stk->capacity + 1));
     err_t error = Veryficator (stk);
     if (error)
         return error;
@@ -110,9 +102,13 @@ err_t CookChicken (stack_t* stk)
     }
 
 //Push elem to stack...........................................................
-
+[[nodiscard]]
 err_t StackPush (stack_t* stk, stack_elem_t elem)
     {
+    err_t error = Veryficator (stk);
+    if (error)
+        return error;
+
     DBG printf ("Push %lf to stack\n", elem);
 
     if (stk->size == stk->capacity)
@@ -130,11 +126,15 @@ err_t StackPush (stack_t* stk, stack_elem_t elem)
 
     stk->size++;
 
+    error = Veryficator (stk);
+    if (error)
+        return error;
+
     return STK_OK;
     }
 
 //Pop elem from stack..........................................................
-
+[[nodiscard]]
 err_t StackPop (stack_t* stk, stack_elem_t* elem_from_stack)
     {
     err_t error = Veryficator (stk);
@@ -156,6 +156,10 @@ err_t StackPop (stack_t* stk, stack_elem_t* elem_from_stack)
 
 err_t StackDump (stack_t* stk)
     {
+    err_t error = Veryficator (stk);
+    if (error)
+        return error;
+
     printf ("chicken_start_stk = <%llu>\n", stk->chicken_start_stk);
     printf ("chicken_end_stk   = <%llu>\n", stk->chicken_end_stk);
 
@@ -168,6 +172,9 @@ err_t StackDump (stack_t* stk)
     // printf
     // printf
     // printf;
+    error = Veryficator (stk);
+    if (error)
+        return error;
     return STK_OK;
     }
 
@@ -175,6 +182,10 @@ err_t StackDump (stack_t* stk)
 
 err_t StackDtor (stack_t* stk)
     {
+    err_t error = Veryficator (stk);
+    if (error)
+        return error;
+
     free (stk->DATA);
     stk->DATA = NULL;
     stk->buffer = NULL;

@@ -37,7 +37,7 @@ err_t Veryficator (stack_t* stk)
         return STK_END_CHICK_STK_DIED;
     if (*((uint64_t*)(stk->DATA)) != ((uint64_t)(stk) ^ 0x0BEDDEDA0BEDDEDA))
         return STK_START_CHICK_BUF_DIED;
-    if (*((uint64_t*)(stk->DATA + stk->capacity)) != ((uint64_t)(stk) ^ 0xDEDDEDDEDDEDDEDD))
+    if (*((uint64_t*)(stk->DATA + stk->capacity + 1)) != ((uint64_t)(stk) ^ 0xDEDDEDDEDDEDDEDD))
         return STK_END_CHICK_BUF_DIED;
     return STK_OK;
     }
