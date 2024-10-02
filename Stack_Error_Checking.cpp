@@ -22,7 +22,15 @@ const char* StackErrorToString(err_t error)
             break;
         case STK_EMPTY_STACK: return "EMPTY STACK";
             break;
-        default: return "UNCNOWN ERROR";
+        case STK_START_CHICK_STK_DIED: return "start chicken stk is died";                //dump is many printfs with absolutely inf of stack
+            break;                                                                        //and addr of all and
+        case STK_END_CHICK_STK_DIED: return "end chicken stk is died";                    //two HASHs, if hash error, printf error
+            break;
+        case STK_START_CHICK_BUF_DIED: return "start chicken buf is died";
+            break;
+        case STK_END_CHICK_BUF_DIED: return "end chicken buf is died";
+            break;
+        default: return "UNKNOWN ERROR";
         }
     }
 
@@ -38,6 +46,14 @@ err_t Veryficator (stack_t stk)
         return STK_CAPACITY_NOT_EXSIST;
     else if (stk.size > stk.capacity)
         return STK_SIZE_LARGER_CAPACITY;
+    else if(stk.chicken_start_stk != ((uint64_t)(&stk) ^ 0x0BEDDEDA))
+        return STK_START_CHICK_STK_DIED;
+    else if(stk.chicken_end_stk  != ((uint64_t)(&stk) ^ 0xDEDDEDDED))
+        return STK_END_CHICK_STK_DIED;
+    else if (*(stk.DATA) != 0x0BEDDEDA)
+        return STK_START_CHICK_BUF_DIED;
+    else if (*(stk->DATA + stk->capacity) = 0xDEDDEDDED)
+        return STK_END_CHICK_BUF_DIED;
     else
         return STK_OK;
     }

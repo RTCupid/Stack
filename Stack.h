@@ -16,7 +16,11 @@ enum err_t
     STK_STACK_NOT_EXSIST,
     STK_CAPACITY_NOT_EXSIST,
     STK_SIZE_LARGER_CAPACITY,
-    STK_EMPTY_STACK};
+    STK_EMPTY_STACK,
+    STK_START_CHICK_STK_DIED,
+    STK_END_CHICK_STK_DIED,
+    STK_START_CHICK_BUF_DIED,
+    STK_END_CHICK_BUF_DIED};
 
 const stack_elem_t NOT_AN_ELEMENT = NAN;                                       // = NAN for stack_elem_t = double
 
