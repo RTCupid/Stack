@@ -86,20 +86,20 @@ err_t StackCtor (stack_t* stk, int startCapacity)
 [[nodiscard]]
 err_t CookChicken (stack_t* stk)
     {
-    stk->chicken_start_stk = ((uint64_t)(stk) ^ 0x0BEDDEDA0BEDDEDA);
+    *(uint64_t*)(&stk->chicken_start_stk) = ((uint64_t)(stk) ^ 0x0BEDDEDA0BEDDEDA);
     DBG printf ("(uint64_t)(&stk) = <%llu>\n", (uint64_t)(stk));
     DBG printf ("&stk = <%p>\n", stk);
     DBG printf ("stk.chicken_start_stk = <%llu>\n", stk->chicken_start_stk);
 
-    stk->chicken_end_stk  = ((uint64_t)(stk) ^ 0xDEDDEDDEDDEDDEDD);
+    *(uint64_t*)(&stk->chicken_end_stk)  = ((uint64_t)(stk) ^ 0xDEDDEDDEDDEDDEDD);
     DBG printf ("stk.chicken_end_stk = <%llu>\n\n", stk->chicken_start_stk);
 
-    *(uint64_t*)(stk->DATA) = 0x0BEDDEDA0BEDDEDA;
+    *((uint64_t*)(stk->DATA)) = (uint64_t)(stk) ^ 0x0BEDDEDA0BEDDEDA;
 
-    *((uint64_t*)(stk->DATA + stk->capacity)) = 0xDEDDEDDEDDEDDEDD;
+    *((uint64_t*)(stk->DATA + stk->capacity)) = (uint64_t)(stk) ^ 0xDEDDEDDEDDEDDEDD;
 
     DBG printf ("&start chicken buffer = <%p>\n", stk->DATA);
-    DBG printf (" start chicken buffer = <%llx>\n\n", *((uint64_t*)stk->DATA));
+    DBG printf (" start chicken buffer = <%llx>\n\n", *((uint64_t*)(stk->DATA)));
     DBG printf (" &end  chicken buffer = <%p>\n", stk->DATA + stk->capacity);
     DBG printf ("  end  chicken buffer = <%llx>\n\n", *((uint64_t*)stk->DATA + stk->capacity));
     err_t error = Veryficator (stk);
