@@ -7,64 +7,50 @@ const char* StackErrorToString(err_t error)
     switch (error)
         {
         case STK_OK: return "OK";
-            break;
         case STK_CALLOC_FAILED: return "in StackCtor calloc return 'NULL'";
-            break;
         case STK_REALLOC_FAILED: return "in StackPush realloc return 'NULL'";
-            break;
-        case STK_STACK_NOT_EXSIST: return "STACK NOT EXSIST";
-            break;
         case STK_BUFFER_NOT_EXSIST: return "BUFFER NOT EXSIST";
-            break;
         case STK_CAPACITY_NOT_EXSIST: return "CAPACITY NOT EXSIST";
-            break;
         case STK_SIZE_LARGER_CAPACITY: return "SIZE LARGER THAN CAPACITY";
-            break;
         case STK_EMPTY_STACK: return "EMPTY STACK";
-            break;
-        case STK_START_CHICK_STK_DIED: return "start chicken stk is died";                //dump is many printfs with absolutely inf of stack
-            break;                                                                        //and addr of all and
+        case STK_START_CHICK_STK_DIED: return "start chicken stk is died";                //dump is many printfs with absolutely inf of stack                                                                       //and addr of all and
         case STK_END_CHICK_STK_DIED: return "end chicken stk is died";                    //two HASHs, if hash error, printf error
-            break;
         case STK_START_CHICK_BUF_DIED: return "start chicken buf is died";
-            break;
         case STK_END_CHICK_BUF_DIED: return "end chicken buf is died";
-            break;
         default: return "UNKNOWN ERROR";
         }
     }
 
 // function veryfication stack.................................................
 
-err_t Veryficator (stack_t stk)
+err_t Veryficator (stack_t* stk)
     {
-    if (&stk == NULL)
-        return STK_STACK_NOT_EXSIST;
-    else if (stk.buffer == NULL)
+    if (stk->buffer == NULL)
         return STK_BUFFER_NOT_EXSIST;
-    else if (stk.capacity == 0)
+    if (stk->capacity == 0)
         return STK_CAPACITY_NOT_EXSIST;
-    else if (stk.size > stk.capacity)
+    if (stk->size > stk->capacity)
         return STK_SIZE_LARGER_CAPACITY;
-    else if(stk.chicken_start_stk != ((uint64_t)(&stk) ^ 0x0BEDDEDA))
+    if(stk->chicken_start_stk != ((uint64_t)(stk) ^ 0x0BEDDEDA0BEDDEDA))
         return STK_START_CHICK_STK_DIED;
-    else if(stk.chicken_end_stk  != ((uint64_t)(&stk) ^ 0xDEDDEDDED))
+    if(stk->chicken_end_stk  != ((uint64_t)(stk) ^ 0xDEDDEDDEDDEDDEDD))
         return STK_END_CHICK_STK_DIED;
-    else if (*(stk.DATA) != 0x0BEDDEDA)
+    printf ("%lld\n", (uint64_t)(*(stk->DATA)));
+    if ((*(uint64_t*)(stk->DATA)) != 0x0BEDDEDA0BEDDEDA)
         return STK_START_CHICK_BUF_DIED;
-    else if (*(stk->DATA + stk->capacity) = 0xDEDDEDDED)
+    printf ("%lld\n", *((uint64_t*)(stk->DATA + stk->capacity)));
+    if (*((uint64_t*)(stk->DATA + stk->capacity)) == 0xDEDDEDDEDDEDDEDD)
         return STK_END_CHICK_BUF_DIED;
-    else
-        return STK_OK;
+    return STK_OK;
     }
 
 // print error to consol.......................................................
 
-int PrintErrorStack (err_t error)
+int PrintErrorStack (err_t error, const char* namefnc)
     {
     if (error)
         {
-        printf("STACK ERROR: %s\n", StackErrorToString(error));
+        printf("STACK ERROR: in function %s error: %s\n", namefnc, StackErrorToString(error));
         }
     return 1;
     }
