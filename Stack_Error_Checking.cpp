@@ -17,6 +17,8 @@ const char* StackErrorToString(err_t error)
         case STK_END_CHICK_STK_DIED: return "end chicken stk is died";                    //two HASHs, if hash error, printf error
         case STK_START_CHICK_BUF_DIED: return "start chicken buf is died";
         case STK_END_CHICK_BUF_DIED: return "end chicken buf is died";
+        case STK_HASH_OF_STK_BROKEN: return "hash of struct stack is broken";
+        case STK_HASH_OF_BUF_BROKEN: return "hash of buffer is broken";
         default: return "UNKNOWN ERROR";
         }
     }
@@ -39,6 +41,10 @@ err_t Veryficator (const stack_t* stk)
         return STK_START_CHICK_BUF_DIED;
     if (*((uint64_t*)(stk->DATA + stk->capacity + 1)) != ((uint64_t)(stk) ^ 0xDEDDEDDEDDEDDEDD))
         return STK_END_CHICK_BUF_DIED;
+    if (stk->hashStk != HashCounterStk ((const char*)(stk)))
+        return STK_HASH_OF_STK_BROKEN;
+    if (stk->hashBuf != HashCounterBuf ((const char*)(stk->buffer), stk->size))
+        return STK_HASH_OF_BUF_BROKEN;
     return STK_OK;
     }
 

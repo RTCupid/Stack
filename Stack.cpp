@@ -101,9 +101,6 @@ err_t CookChicken (stack_t* stk)
     DBG printf (" start chicken buffer = <%llx>\n\n", *((uint64_t*)(stk->DATA)));
     DBG printf (" &end  chicken buffer = <%p>\n", stk->DATA + stk->capacity + 1);
     DBG printf ("  end  chicken buffer = <%llx>\n\n", *((uint64_t*)stk->DATA + stk->capacity + 1));
-    err_t error = Veryficator (stk);
-    if (error)
-        return error;
 
     return STK_OK;
     }
@@ -118,7 +115,7 @@ err_t HashCount (stack_t* stk)
     }
 
 //function to calculate the hash of buffer.....................................
-
+[[nodiscard]]
 hash_t HashCounterBuf (const char* buffer, size_t size)
     {
     hash_t hash = 0;
@@ -130,7 +127,7 @@ hash_t HashCounterBuf (const char* buffer, size_t size)
     }
 
 //function to calculate the hash of struct stack...............................
-
+[[nodiscard]]
 hash_t HashCounterStk (const char* stk)
     {
     hash_t hash = 0;
@@ -141,11 +138,6 @@ hash_t HashCounterStk (const char* stk)
         }
     return hash;
     }
-
-/*err_t HashChek (const stack_t* stk)
-    {
-    if (stk->hashStk != HashCounterStk (stk
-    }*/
 
 //Push elem to stack...........................................................
 [[nodiscard]]

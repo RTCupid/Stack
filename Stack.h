@@ -19,7 +19,9 @@ enum err_t
     STK_START_CHICK_STK_DIED,
     STK_END_CHICK_STK_DIED,
     STK_START_CHICK_BUF_DIED,
-    STK_END_CHICK_BUF_DIED};
+    STK_END_CHICK_BUF_DIED,
+    STK_HASH_OF_STK_BROKEN,
+    STK_HASH_OF_BUF_BROKEN};
 
 const stack_elem_t NOT_AN_ELEMENT = NAN;                                       // = NAN for stack_elem_t = double
 
@@ -65,5 +67,3 @@ err_t HashCount (stack_t* stk);
 hash_t HashCounterBuf (const char* buffer, size_t size);
 
 hash_t HashCounterStk (const char* Stk);
-
-//err_t HashChek (const stack_t* stk);
