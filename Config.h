@@ -3,4 +3,6 @@ typedef uint64_t hash_t;
 
 #define USE_CANARIES
 
+#define USE_HASH
+
 #define DBG if(0)

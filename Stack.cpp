@@ -87,9 +87,11 @@ err_t StackCtor (stack_t* stk, size_t startCapacity)
         return error;
 #endif
 
+#ifdef USE_HASH
     error = HashCount (stk);
     if (error)
         return error;
+#endif
 
     error = Veryficator (stk);
     if (error)
@@ -188,9 +190,11 @@ err_t StackPush (stack_t* stk, stack_elem_t elem)
 
     stk->size++;
 
+#ifdef USE_HASH
     error = HashCount (stk);
     if (error)
         return error;
+#endif
 
     error = Veryficator (stk);
     if (error)
@@ -212,12 +216,11 @@ err_t StackPop (stack_t* stk, stack_elem_t* elem_from_stack)
     stk->size--;
     *elem_from_stack = stk->buffer[stk->size];
 
-    stk->hashStk = HashCounterStk ((const char*)(&stk));
-    stk->hashBuf = HashCounterBuf ((const char*)(stk->buffer), stk->size);
-
+#ifdef USE_HASH
     error = HashCount (stk);
     if (error)
         return error;
+#endif
 
     error = Veryficator (stk);
     if (error)
@@ -249,14 +252,14 @@ err_t StackDump (stack_t* stk)
     printf ("  size_t size       = <%lld>\n", stk->size);
     printf ("  size_t capacity   = <%lld>\n\n", stk->capacity);
 
+#ifdef USE_HASH
     printf ("  hash_t hashBuf    = <%llu>\n", stk->hashBuf);
     printf ("  hash_t hashStk    = <%llu>\n\n", stk->hashStk);
+#endif
 
     error = PrintSTK (stk);
     if (error)
         return error;
-
-    printf ("\n");
 
     error = Veryficator (stk);
     if (error)
@@ -270,6 +273,7 @@ err_t PrintSTK (stack_t* stk)
     {
     for (int i = (int)stk->size - 1; i >= 0; i--)
         printf ("  buffer[%d] = <%lf>\n", i, stk->buffer[i]);
+    printf ("\n");
     return STK_OK;
     }
 

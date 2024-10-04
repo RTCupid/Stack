@@ -43,10 +43,13 @@ err_t Veryficator (const stack_t* stk)
     if (*((uint64_t*)(stk->DATA + stk->capacity + 1)) != ((uint64_t)(stk) ^ HexSpeakSecond))
         return STK_END_CHICK_BUF_DIED;
 #endif
+
+#ifdef USE_HASH
     if (stk->hashStk != HashCounterStk ((const char*)(stk)))
         return STK_HASH_OF_STK_BROKEN;
     if (stk->hashBuf != HashCounterBuf ((const char*)(stk->buffer), stk->size))
         return STK_HASH_OF_BUF_BROKEN;
+#endif
     return STK_OK;
     }
 
