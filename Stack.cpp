@@ -25,6 +25,8 @@ int main ()
     error = StackPush (&stk, 20);
     PrintErrorStack (error, "StackPush");
 
+    stk.buffer = (stack_elem_t*)27447835384;
+
     error = StackPush (&stk, 30);
     PrintErrorStack (error, "StackPush");
 
@@ -129,7 +131,7 @@ hash_t HashCounterBuf (const char* buffer, size_t size)
 hash_t HashCounterStk (const char* stk)
     {
     hash_t hash = 5381;
-    for (size_t i = 0; i < nElemStructStk; i++)
+    for (size_t i = 0; i < SIZE_STK; i++)
         {
         if (i != indexHashStk)
             hash = hash * 33 ^ stk[i];

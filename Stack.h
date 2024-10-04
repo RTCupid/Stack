@@ -35,6 +35,8 @@ const uint64_t HexSpeakFirst  = 0x0BEDDEDA0BEDDEDA;
 
 const uint64_t HexSpeakSecond = 0xDEDDEDDEDDEDDEDD;
 
+const size_t SIZE_STK = 2 * sizeof (uint64_t) + 2 * sizeof (hash_t) + 2 * sizeof (size_t) + 2 * sizeof (stack_elem_t*);
+
 struct stack_t {
                 uint64_t chicken_start_stk;
                 stack_elem_t* DATA;
