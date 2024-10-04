@@ -7,6 +7,9 @@ int main ()
 
     struct stack_t stk = {0,
                           NULL,
+                          NULL,
+                          0,
+                          0,
                           0,
                           0,
                           0};
@@ -24,6 +27,8 @@ int main ()
     PrintErrorStack (error, "StackPush");
 
     DBG printf ("Before StackPop: stk->size = %lld\n", stk.size);
+
+    StackDump (&stk);
 
     error = StackPop (&stk, &elem_from_stack);
     PrintErrorStack (error, "StackPop");
@@ -215,21 +220,37 @@ err_t StackDump (stack_t* stk)
     if (error)
         return error;
 
-    printf ("chicken_start_stk = <%llu>\n", stk->chicken_start_stk);
-    printf ("chicken_end_stk   = <%llu>\n", stk->chicken_end_stk);
+    printf ("Stack Dump:\n");
+    printf ("  chicken_start_stk = <%llu>\n", stk->chicken_start_stk);
+    printf ("  chicken_end_stk   = <%llu>\n\n", stk->chicken_end_stk);
 
-    printf ("&stk.DATA = <%p>\n", &stk->DATA);
-    printf ("stk.DATA = <%p>\n", stk->DATA);
+    printf ("  &stk.DATA         = <%p>\n", &stk->DATA);
+    printf ("  stk.DATA          = <%p>\n\n", stk->DATA);
 
-    printf ("&stk.buffer = <%p>\n", &stk->buffer);
-    printf ("stk.buffer = <%p>\n", stk->buffer);
-    // printf
-    // printf
-    // printf
-    // printf;
+    printf ("  &stk.buffer       = <%p>\n", &stk->buffer);
+    printf ("  stk.buffer        = <%p>\n\n", stk->buffer);
+
+    printf ("  size_t size       = <%lld>\n", stk->size);
+    printf ("  size_t capacity   = <%lld>\n", stk->capacity);
+    printf ("  hash_t hashBuf    = <%llu>\n", stk->hashBuf);
+    printf ("  hash_t hashStk    = <%llu>\n", stk->hashStk);
+
+    error = PrintSTK (stk);
+    if (error)
+        return error;
+
     error = Veryficator (stk);
     if (error)
         return error;
+    return STK_OK;
+    }
+
+//Print all elem of stack......................................................
+
+err_t PrintSTK (stack_t* stk)
+    {
+    for (int i = (int)stk->size - 1; i >= 0; i--)
+        printf ("  buffer[%d] = <%lf>\n", i, stk->buffer[i]);
     return STK_OK;
     }
 

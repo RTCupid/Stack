@@ -52,8 +52,6 @@ err_t StackPush (stack_t* stk, stack_elem_t elem);
 
 err_t StackPop (stack_t* stk, stack_elem_t* elem_from_stack);
 
-err_t StackDump (stack_t* stk);
-
 err_t StackDtor (stack_t* stk);
 
 err_t Veryficator (const stack_t* stk);
@@ -67,3 +65,7 @@ err_t HashCount (stack_t* stk);
 hash_t HashCounterBuf (const char* buffer, size_t size);
 
 hash_t HashCounterStk (const char* Stk);
+
+err_t StackDump (stack_t* stk);
+
+err_t PrintSTK (stack_t* stk);
