@@ -7,8 +7,7 @@
 
 #include "Config.h"
 
-enum err_t
-    {                                                                          // enum err_t
+enum err_t {                                                                          // enum err_t
     STK_OK = 0,
     STK_CALLOC_FAILED = 1,
     STK_BUFFER_NOT_EXSIST,                                                     // not enough memory to create stack data
@@ -21,7 +20,8 @@ enum err_t
     STK_START_CHICK_BUF_DIED,
     STK_END_CHICK_BUF_DIED,
     STK_HASH_OF_STK_BROKEN,
-    STK_HASH_OF_BUF_BROKEN};
+    STK_HASH_OF_BUF_BROKEN
+};
 
 const stack_elem_t NOT_AN_ELEMENT = NAN;                                       // = NAN for stack_elem_t = double
 
@@ -37,17 +37,21 @@ const size_t SIZE_STK = 2 * sizeof (uint64_t) + 2 * sizeof (hash_t) + 2 * sizeof
 const size_t indexStartHashStk = sizeof (uint64_t) + 2 * sizeof (stack_elem_t*) + 2 * sizeof (size_t) + sizeof (hash_t);
 const size_t indexEndHashStk   = sizeof (uint64_t) + 2 * sizeof (stack_elem_t*) + 2 * sizeof (size_t) + sizeof (hash_t) * 2;
 
+//TODO: struct  typedef "stack_t" K&R read
 struct stack_t {
-                uint64_t chicken_start_stk;
-                stack_elem_t* DATA;
-                stack_elem_t* buffer;
-                size_t size;
-                size_t capacity;
-                hash_t hashBuf;
-                hash_t hashStk;
-                uint64_t chicken_end_stk;
-                };
+    uint64_t chicken_start_stk;
+    stack_elem_t* DATA;
+    stack_elem_t* buffer;
+    size_t size;
+    size_t capacity;
+    hash_t hashBuf;
+    hash_t hashStk;
+    uint64_t chicken_end_stk;
+};
 
+#def
+
+//typedef struct abc {...} abc_t;
 err_t CookChicken (stack_t* stk);
 
 err_t StackCtor (stack_t* stk, size_t startCapacity);

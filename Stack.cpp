@@ -1,10 +1,12 @@
 #include "Stack.h"
 
+
+
 int main ()
     {
     printf ("# Program for Solve Square Equation\n");
     printf ("# (c) RTCupid, 2024\n\n");
-
+//TODO: typedef for struct
     struct stack_t stk = {0,
                           NULL,
                           NULL,
@@ -12,7 +14,7 @@ int main ()
                           0,
                           0,
                           0,
-                          0};
+                          0};//TODO: = {} init all 0
 
     stack_elem_t elem_from_stack = NOT_AN_ELEMENT;
 
@@ -26,6 +28,7 @@ int main ()
 
     error = StackPush (&stk, 20);
     PrintErrorStack (error, "StackPush");
+
 
     error = StackPush (&stk, 30);
     PrintErrorStack (error, "StackPush");
@@ -53,15 +56,16 @@ int main ()
 // make stack..................................................................
 [[nodiscard]]
 err_t StackCtor (stack_t* stk, size_t startCapacity)
-    {
+{
     err_t error = STK_OK;
 #ifdef USE_CANARIES
     stk->DATA = (stack_elem_t*)calloc (startCapacity + 2, sizeof (stack_elem_t));
+    //TODO: залить poison
     if (stk->DATA == NULL)
-        {
+    {
         return STK_CALLOC_FAILED;
-        }
-
+    }
+//todo check return value of std function
     stk->buffer = (stack_elem_t*)((char*)stk->DATA + 1 * sizeof (stack_elem_t));
 #else
     stk->buffer = (stack_elem_t*)calloc (startCapacity, sizeof (stack_elem_t));
@@ -72,17 +76,15 @@ err_t StackCtor (stack_t* stk, size_t startCapacity)
     stk->capacity = startCapacity;
 
 #ifdef USE_CANARIES
-    error = CookChicken (stk);                                           // make canary (or chicken)
-    if (error)
-        return error;
+    CookChicken (stk);                                           // make canary (or chicken)
 #endif
 
 #ifdef USE_HASH
-    error = HashCount (stk);
+    HashCount (stk);
     if (error)
         return error;
 #endif
-
+//todo verify
     error = Veryficator (stk);
     if (error)
         return error;
@@ -143,12 +145,17 @@ hash_t HashCounterStk (const char* stk)
 [[nodiscard]]
 err_t StackPush (stack_t* stk, stack_elem_t elem)
     {
+    //todo:
     err_t error = Veryficator (stk);
     if (error)
-        return error;
+    {
+        dump(stk, error);
+        assert(0);
+    }
 
     if (stk->size == stk->capacity)
         {
+        //todo:remove magic number
         stk->DATA = (stack_elem_t*)realloc (stk->DATA, (stk->capacity * 2 + 2) * sizeof (stack_elem_t));   //sizeof (est)
         if (stk->DATA == NULL)
             {
@@ -193,6 +200,7 @@ err_t StackPop (stack_t* stk, stack_elem_t* elem_from_stack)
     stk->size--;
     *elem_from_stack = stk->buffer[stk->size];
 
+//todo realloc below
 #ifdef USE_HASH
     error = HashCount (stk);
     if (error)
@@ -209,6 +217,20 @@ err_t StackPop (stack_t* stk, stack_elem_t* elem_from_stack)
 
 err_t StackDump (stack_t* stk)
     {
+    //todo cool storage of errors
+    // int errors = 0;
+    // //000000001 = 1
+    // //000000010 = 2
+    // if ()
+    // {
+    //     errors = errors | 1;
+    // }
+    // //10101010
+    // if(errors & 2)
+    // {
+    //     printf()
+    // }
+
     printf ("Stack Dump:\n");
 #ifdef USE_CANARIES
     printf ("  chicken_start_stk = <%llu>\n", stk->chicken_start_stk);
@@ -241,6 +263,7 @@ err_t PrintSTK (stack_t* stk)
     {
     for (int i = (int)stk->size - 1; i >= 0; i--)
         printf ("  buffer[%d] = <%lf>\n", i, stk->buffer[i]);
+    //TODO: buffer[10] = 13979173918 (POISON)
     printf ("\n");
     return STK_OK;
     }
@@ -249,6 +272,7 @@ err_t PrintSTK (stack_t* stk)
 
 err_t StackDtor (stack_t* stk)
     {
+    //verify
     err_t error = Veryficator (stk);
     if (error)
         return error;
