@@ -33,14 +33,16 @@ err_t Veryficator (const stack_t* stk)
         return STK_CAPACITY_NOT_EXSIST;
     if (stk->size > stk->capacity)
         return STK_SIZE_LARGER_CAPACITY;
-    if(stk->chicken_start_stk != ((uint64_t)(stk) ^ 0x0BEDDEDA0BEDDEDA))
+#ifdef USE_CANARIES
+    if(stk->chicken_start_stk != ((uint64_t)(stk) ^ HexSpeakFirst))
         return STK_START_CHICK_STK_DIED;
-    if(stk->chicken_end_stk  != ((uint64_t)(stk) ^ 0xDEDDEDDEDDEDDEDD))
+    if(stk->chicken_end_stk  != ((uint64_t)(stk) ^ HexSpeakSecond))
         return STK_END_CHICK_STK_DIED;
-    if (*((uint64_t*)(stk->DATA)) != ((uint64_t)(stk) ^ 0x0BEDDEDA0BEDDEDA))
+    if (*((uint64_t*)(stk->DATA)) != ((uint64_t)(stk) ^ HexSpeakFirst))
         return STK_START_CHICK_BUF_DIED;
-    if (*((uint64_t*)(stk->DATA + stk->capacity + 1)) != ((uint64_t)(stk) ^ 0xDEDDEDDEDDEDDEDD))
+    if (*((uint64_t*)(stk->DATA + stk->capacity + 1)) != ((uint64_t)(stk) ^ HexSpeakSecond))
         return STK_END_CHICK_BUF_DIED;
+#endif
     if (stk->hashStk != HashCounterStk ((const char*)(stk)))
         return STK_HASH_OF_STK_BROKEN;
     if (stk->hashBuf != HashCounterBuf ((const char*)(stk->buffer), stk->size))

@@ -31,18 +31,20 @@ const size_t nElemStructStk = 8;
 
 const size_t indexHashStk = 6;
 
-const uint64_t HexSpeakFirst = 0x0BEDDEDA0BEDDEDA;
+const uint64_t HexSpeakFirst  = 0x0BEDDEDA0BEDDEDA;
 
 const uint64_t HexSpeakSecond = 0xDEDDEDDEDDEDDEDD;
 
-struct stack_t {uint64_t chicken_start_stk;
+struct stack_t {
+                uint64_t chicken_start_stk;
                 stack_elem_t* DATA;
                 stack_elem_t* buffer;
                 size_t size;
                 size_t capacity;
                 hash_t hashBuf;
                 hash_t hashStk;
-                uint64_t chicken_end_stk;};
+                uint64_t chicken_end_stk;
+                };
 
 err_t CookChicken (stack_t* stk);
 

@@ -59,6 +59,8 @@ int main ()
 [[nodiscard]]
 err_t StackCtor (stack_t* stk, size_t startCapacity)
     {
+    err_t error = STK_OK;
+#ifdef USE_CANARIES
     stk->DATA = (stack_elem_t*)calloc (startCapacity + 2, sizeof (stack_elem_t));
     if (stk->DATA == NULL)
         {
@@ -67,6 +69,10 @@ err_t StackCtor (stack_t* stk, size_t startCapacity)
     DBG printf ("Start: stk->DATA   = <%p>\n", stk->DATA);
 
     stk->buffer = (stack_elem_t*)((char*)stk->DATA + 1 * sizeof (stack_elem_t));
+#else
+    stk->buffer = (stack_elem_t*)calloc (startCapacity, sizeof (stack_elem_t));
+#endif
+
     DBG printf ("Start: stk->buffer = <%p>\n", stk->buffer);
 
     stk->size = 0;
@@ -75,9 +81,11 @@ err_t StackCtor (stack_t* stk, size_t startCapacity)
     stk->capacity = startCapacity;
     DBG printf ("Start: stk->capacity = %lld\n\n", stk->capacity);
 
-    err_t error = CookChicken (stk);                                           // make canary (or chicken)
+#ifdef USE_CANARIES
+    error = CookChicken (stk);                                           // make canary (or chicken)
     if (error)
         return error;
+#endif
 
     error = HashCount (stk);
     if (error)
@@ -139,11 +147,11 @@ hash_t HashCounterBuf (const char* buffer, size_t size)
 [[nodiscard]]
 hash_t HashCounterStk (const char* stk)
     {
-    hash_t hash = 0;
+    hash_t hash = 5381;
     for (size_t i = 0; i < nElemStructStk; i++)
         {
         if (i != indexHashStk)
-            hash += stk[i];
+            hash = hash * 33 ^ stk[i];
         }
     return hash;
     }
@@ -167,9 +175,11 @@ err_t StackPush (stack_t* stk, stack_elem_t elem)
             }
         stk->capacity *= 2;
 
+#ifdef USE_CANARIES
         error = CookChicken (stk);                                           // make canary (or chicken)
         if (error)
             return error;
+#endif
         }
 
     stk->buffer[stk->size] = elem;
@@ -225,11 +235,13 @@ err_t StackDump (stack_t* stk)
         return error;
 
     printf ("Stack Dump:\n");
+#ifdef USE_CANARIES
     printf ("  chicken_start_stk = <%llu>\n", stk->chicken_start_stk);
     printf ("  chicken_end_stk   = <%llu>\n\n", stk->chicken_end_stk);
 
     printf ("  &stk.DATA         = <%p>\n", &stk->DATA);
     printf ("  stk.DATA          = <%p>\n\n", stk->DATA);
+#endif
 
     printf ("  &stk.buffer       = <%p>\n", &stk->buffer);
     printf ("  stk.buffer        = <%p>\n\n", stk->buffer);
