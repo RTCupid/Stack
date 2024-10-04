@@ -27,12 +27,12 @@ const char* StackErrorToString(err_t error)
 
 err_t Veryficator (const stack_t* stk)
     {
-    if (stk->buffer == NULL)
-        return STK_BUFFER_NOT_EXSIST;
-    if (stk->capacity == 0)
-        return STK_CAPACITY_NOT_EXSIST;
-    if (stk->size > stk->capacity)
-        return STK_SIZE_LARGER_CAPACITY;
+#ifdef USE_HASH
+    if (stk->hashStk != HashCounterStk ((const char*)(stk)))
+        return STK_HASH_OF_STK_BROKEN;
+    if (stk->hashBuf != HashCounterBuf ((const char*)(stk->buffer), stk->size))
+        return STK_HASH_OF_BUF_BROKEN;
+#endif
 
 #ifdef USE_CANARIES
     if(stk->chicken_start_stk != ((uint64_t)(stk) ^ HexSpeakFirst))
@@ -45,12 +45,12 @@ err_t Veryficator (const stack_t* stk)
         return STK_END_CHICK_BUF_DIED;
 #endif
 
-#ifdef USE_HASH
-    if (stk->hashStk != HashCounterStk ((const char*)(stk)))
-        return STK_HASH_OF_STK_BROKEN;
-    if (stk->hashBuf != HashCounterBuf ((const char*)(stk->buffer), stk->size))
-        return STK_HASH_OF_BUF_BROKEN;
-#endif
+    if (stk->buffer == NULL)
+        return STK_BUFFER_NOT_EXSIST;
+    if (stk->capacity == 0)
+        return STK_CAPACITY_NOT_EXSIST;
+    if (stk->size > stk->capacity)
+        return STK_SIZE_LARGER_CAPACITY;
     return STK_OK;
     }
 

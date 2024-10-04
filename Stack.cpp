@@ -27,8 +27,6 @@ int main ()
     error = StackPush (&stk, 20);
     PrintErrorStack (error, "StackPush");
 
-    //stk.DATA = (stack_elem_t*)27447835384;
-
     error = StackPush (&stk, 30);
     PrintErrorStack (error, "StackPush");
 
