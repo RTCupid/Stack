@@ -27,6 +27,8 @@ const double startElem = 10;
 
 const size_t nElemStructStk = 8;
 
+const size_t indexHashStk = 6;
+
 const uint64_t HexSpeakFirst = 0x0BEDDEDA0BEDDEDA;
 
 const uint64_t HexSpeakSecond = 0xDEDDEDDEDDEDDEDD;
@@ -52,12 +54,16 @@ err_t StackDump (stack_t* stk);
 
 err_t StackDtor (stack_t* stk);
 
-err_t Veryficator (stack_t* stk);
+err_t Veryficator (const stack_t* stk);
 
 const char* StackErrorToString(err_t error);
 
 int PrintErrorStack (err_t error, const char* namefnc);
 
+err_t HashCount (stack_t* stk);
+
 hash_t HashCounterBuf (const char* buffer, size_t size);
 
 hash_t HashCounterStk (const char* Stk);
+
+//err_t HashChek (const stack_t* stk);

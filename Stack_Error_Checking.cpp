@@ -23,7 +23,7 @@ const char* StackErrorToString(err_t error)
 
 // function veryfication stack.................................................
 
-err_t Veryficator (stack_t* stk)
+err_t Veryficator (const stack_t* stk)
     {
     if (stk->buffer == NULL)
         return STK_BUFFER_NOT_EXSIST;

@@ -70,8 +70,9 @@ err_t StackCtor (stack_t* stk, size_t startCapacity)
     if (error)
         return error;
 
-    stk->hashStk = HashCounterStk ((const char*)(&stk));
-    stk->hashBuf = HashCounterBuf ((const char*)(stk->buffer), stk->size);
+    error = HashCount (stk);
+    if (error)
+        return error;
 
     error = Veryficator (stk);
     if (error)
@@ -107,6 +108,15 @@ err_t CookChicken (stack_t* stk)
     return STK_OK;
     }
 
+//function count hash stk and buf..............................................
+[[nodiscard]]
+err_t HashCount (stack_t* stk)
+    {
+    stk->hashBuf = HashCounterBuf ((const char*)(stk->buffer), stk->size);
+    stk->hashStk = HashCounterStk ((const char*)(stk));
+    return STK_OK;
+    }
+
 //function to calculate the hash of buffer.....................................
 
 hash_t HashCounterBuf (const char* buffer, size_t size)
@@ -126,10 +136,16 @@ hash_t HashCounterStk (const char* stk)
     hash_t hash = 0;
     for (size_t i = 0; i < nElemStructStk; i++)
         {
-        hash += stk[i];
+        if (i != indexHashStk)
+            hash += stk[i];
         }
     return hash;
     }
+
+/*err_t HashChek (const stack_t* stk)
+    {
+    if (stk->hashStk != HashCounterStk (stk
+    }*/
 
 //Push elem to stack...........................................................
 [[nodiscard]]
@@ -161,6 +177,10 @@ err_t StackPush (stack_t* stk, stack_elem_t elem)
 
     stk->size++;
 
+    error = HashCount (stk);
+    if (error)
+        return error;
+
     error = Veryficator (stk);
     if (error)
         return error;
@@ -181,6 +201,13 @@ err_t StackPop (stack_t* stk, stack_elem_t* elem_from_stack)
     stk->size--;
     *elem_from_stack = stk->buffer[stk->size];
 
+    stk->hashStk = HashCounterStk ((const char*)(&stk));
+    stk->hashBuf = HashCounterBuf ((const char*)(stk->buffer), stk->size);
+
+    error = HashCount (stk);
+    if (error)
+        return error;
+
     error = Veryficator (stk);
     if (error)
         return error;
@@ -191,6 +218,7 @@ err_t StackPop (stack_t* stk, stack_elem_t* elem_from_stack)
 
 err_t StackDump (stack_t* stk)
     {
+
     err_t error = Veryficator (stk);
     if (error)
         return error;
