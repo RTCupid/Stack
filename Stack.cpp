@@ -23,13 +23,13 @@ int main ()
     error = StackPush (&stk, 30);
     PrintErrorStack (error, "StackPush");
 
-    DBG printf ("Before StackPop: stk->size = %d\n", stk.size);
+    DBG printf ("Before StackPop: stk->size = %lld\n", stk.size);
 
     error = StackPop (&stk, &elem_from_stack);
     PrintErrorStack (error, "StackPop");
 
 
-    DBG printf ("After StackPop: stk->size = %d\n", stk.size);
+    DBG printf ("After StackPop: stk->size = %lld\n", stk.size);
     DBG printf ("elemFromStack = %lf\n\n", elem_from_stack);
 
     error = StackPop (&stk, &elem_from_stack);
@@ -48,7 +48,7 @@ int main ()
 
 // make stack..................................................................
 [[nodiscard]]
-err_t StackCtor (stack_t* stk, int startCapacity)
+err_t StackCtor (stack_t* stk, size_t startCapacity)
     {
     stk->DATA = (stack_elem_t*)calloc (startCapacity + 2, sizeof (stack_elem_t));
     if (stk->DATA == NULL)
@@ -61,14 +61,18 @@ err_t StackCtor (stack_t* stk, int startCapacity)
     DBG printf ("Start: stk->buffer = <%p>\n", stk->buffer);
 
     stk->size = 0;
-    DBG printf ("Start: stk->size = %d\n", stk->size);
+    DBG printf ("Start: stk->size = %lld\n", stk->size);
 
     stk->capacity = startCapacity;
-    DBG printf ("Start: stk->capacity = %d\n\n", stk->capacity);
+    DBG printf ("Start: stk->capacity = %lld\n\n", stk->capacity);
 
     err_t error = CookChicken (stk);                                           // make canary (or chicken)
     if (error)
         return error;
+
+    stk->hashStk = HashCounterStk ((const char*)(&stk));
+    stk->hashBuf = HashCounterBuf ((const char*)(stk->buffer), stk->size);
+
     error = Veryficator (stk);
     if (error)
         return error;
@@ -80,17 +84,17 @@ err_t StackCtor (stack_t* stk, int startCapacity)
 [[nodiscard]]
 err_t CookChicken (stack_t* stk)
     {
-    *(uint64_t*)(&stk->chicken_start_stk) = ((uint64_t)(stk) ^ 0x0BEDDEDA0BEDDEDA);
+    *(uint64_t*)(&stk->chicken_start_stk) = ((uint64_t)(stk) ^ HexSpeakFirst);
     DBG printf ("(uint64_t)(&stk) = <%llu>\n", (uint64_t)(stk));
     DBG printf ("&stk = <%p>\n", stk);
     DBG printf ("stk.chicken_start_stk = <%llu>\n", stk->chicken_start_stk);
 
-    *(uint64_t*)(&stk->chicken_end_stk)  = ((uint64_t)(stk) ^ 0xDEDDEDDEDDEDDEDD);
+    *(uint64_t*)(&stk->chicken_end_stk)  = ((uint64_t)(stk) ^ HexSpeakSecond);
     DBG printf ("stk.chicken_end_stk = <%llu>\n\n", stk->chicken_start_stk);
 
-    *((uint64_t*)(stk->DATA)) = (uint64_t)(stk) ^ 0x0BEDDEDA0BEDDEDA;
+    *((uint64_t*)(stk->DATA)) = (uint64_t)(stk) ^ HexSpeakFirst;
 
-    *((uint64_t*)(stk->DATA + stk->capacity + 1)) = (uint64_t)(stk) ^ 0xDEDDEDDEDDEDDEDD;
+    *((uint64_t*)(stk->DATA + stk->capacity + 1)) = (uint64_t)(stk) ^ HexSpeakSecond;
 
     DBG printf ("&start chicken buffer = <%p>\n", stk->DATA);
     DBG printf (" start chicken buffer = <%llx>\n\n", *((uint64_t*)(stk->DATA)));
@@ -101,6 +105,30 @@ err_t CookChicken (stack_t* stk)
         return error;
 
     return STK_OK;
+    }
+
+//function to calculate the hash of buffer.....................................
+
+hash_t HashCounterBuf (const char* buffer, size_t size)
+    {
+    hash_t hash = 0;
+    for (size_t i = 0; i < size; i++)
+        {
+        hash += buffer[i];
+        }
+    return hash;
+    }
+
+//function to calculate the hash of struct stack...............................
+
+hash_t HashCounterStk (const char* stk)
+    {
+    hash_t hash = 0;
+    for (size_t i = 0; i < nElemStructStk; i++)
+        {
+        hash += stk[i];
+        }
+    return hash;
     }
 
 //Push elem to stack...........................................................
@@ -129,7 +157,7 @@ err_t StackPush (stack_t* stk, stack_elem_t elem)
 
     stk->buffer[stk->size] = elem;
 
-    DBG printf ("stk->buffer[%d] = %lf\n\n", stk->size, stk->buffer[stk->size]);
+    DBG printf ("stk->buffer[%lld] = %lf\n\n", stk->size, stk->buffer[stk->size]);
 
     stk->size++;
 

@@ -25,16 +25,24 @@ const stack_elem_t NOT_AN_ELEMENT = NAN;                                       /
 
 const double startElem = 10;
 
+const size_t nElemStructStk = 8;
+
+const uint64_t HexSpeakFirst = 0x0BEDDEDA0BEDDEDA;
+
+const uint64_t HexSpeakSecond = 0xDEDDEDDEDDEDDEDD;
+
 struct stack_t {uint64_t chicken_start_stk;
                 stack_elem_t* DATA;
                 stack_elem_t* buffer;
-                int size;
-                int capacity;
+                size_t size;
+                size_t capacity;
+                hash_t hashBuf;
+                hash_t hashStk;
                 uint64_t chicken_end_stk;};
 
 err_t CookChicken (stack_t* stk);
 
-err_t StackCtor (stack_t* stk, int startSize);
+err_t StackCtor (stack_t* stk, size_t startCapacity);
 
 err_t StackPush (stack_t* stk, stack_elem_t elem);
 
@@ -49,3 +57,7 @@ err_t Veryficator (stack_t* stk);
 const char* StackErrorToString(err_t error);
 
 int PrintErrorStack (err_t error, const char* namefnc);
+
+hash_t HashCounterBuf (const char* buffer, size_t size);
+
+hash_t HashCounterStk (const char* Stk);
