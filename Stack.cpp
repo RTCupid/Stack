@@ -31,20 +31,13 @@ int main ()
     error = StackPush (&stk, 40);
     PrintErrorStack (error, "StackPush");
 
-    DBG printf ("Before StackPop: stk->size = %lld\n", stk.size);
-
     StackDump (&stk);
 
     error = StackPop (&stk, &elem_from_stack);
     PrintErrorStack (error, "StackPop");
 
-    DBG printf ("After StackPop: stk->size = %lld\n", stk.size);
-    DBG printf ("elemFromStack = %lf\n\n", elem_from_stack);
-
     error = StackPop (&stk, &elem_from_stack);
     PrintErrorStack (error, "StackPop");
-
-    DBG printf ("elemFromStack = %lf\n\n", elem_from_stack);
 
     error = StackDtor (&stk);
     PrintErrorStack (error, "StackDtor");
@@ -66,20 +59,15 @@ err_t StackCtor (stack_t* stk, size_t startCapacity)
         {
         return STK_CALLOC_FAILED;
         }
-    DBG printf ("Start: stk->DATA   = <%p>\n", stk->DATA);
 
     stk->buffer = (stack_elem_t*)((char*)stk->DATA + 1 * sizeof (stack_elem_t));
 #else
     stk->buffer = (stack_elem_t*)calloc (startCapacity, sizeof (stack_elem_t));
 #endif
 
-    DBG printf ("Start: stk->buffer = <%p>\n", stk->buffer);
-
     stk->size = 0;
-    DBG printf ("Start: stk->size = %lld\n", stk->size);
 
     stk->capacity = startCapacity;
-    DBG printf ("Start: stk->capacity = %lld\n\n", stk->capacity);
 
 #ifdef USE_CANARIES
     error = CookChicken (stk);                                           // make canary (or chicken)
@@ -105,21 +93,12 @@ err_t StackCtor (stack_t* stk, size_t startCapacity)
 err_t CookChicken (stack_t* stk)
     {
     *(uint64_t*)(&stk->chicken_start_stk) = ((uint64_t)(stk) ^ HexSpeakFirst);
-    DBG printf ("(uint64_t)(&stk) = <%llu>\n", (uint64_t)(stk));
-    DBG printf ("&stk = <%p>\n", stk);
-    DBG printf ("stk.chicken_start_stk = <%llu>\n", stk->chicken_start_stk);
 
     *(uint64_t*)(&stk->chicken_end_stk)  = ((uint64_t)(stk) ^ HexSpeakSecond);
-    DBG printf ("stk.chicken_end_stk = <%llu>\n\n", stk->chicken_start_stk);
 
     *((uint64_t*)(stk->DATA)) = (uint64_t)(stk) ^ HexSpeakFirst;
 
     *((uint64_t*)(stk->DATA + stk->capacity + 1)) = (uint64_t)(stk) ^ HexSpeakSecond;
-
-    DBG printf ("&start chicken buffer = <%p>\n", stk->DATA);
-    DBG printf (" start chicken buffer = <%llx>\n\n", *((uint64_t*)(stk->DATA)));
-    DBG printf (" &end  chicken buffer = <%p>\n", stk->DATA + stk->capacity + 1);
-    DBG printf ("  end  chicken buffer = <%llx>\n\n", *((uint64_t*)stk->DATA + stk->capacity + 1));
 
     return STK_OK;
     }
@@ -166,8 +145,6 @@ err_t StackPush (stack_t* stk, stack_elem_t elem)
     if (error)
         return error;
 
-    DBG printf ("Push %lf to stack\n", elem);
-
     if (stk->size == stk->capacity)
         {
         stk->DATA = (stack_elem_t*)realloc (stk->DATA, (stk->capacity * 2 + 2) * sizeof (stack_elem_t));   //sizeof (est)
@@ -185,8 +162,6 @@ err_t StackPush (stack_t* stk, stack_elem_t elem)
         }
 
     stk->buffer[stk->size] = elem;
-
-    DBG printf ("stk->buffer[%lld] = %lf\n\n", stk->size, stk->buffer[stk->size]);
 
     stk->size++;
 
