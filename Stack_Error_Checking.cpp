@@ -6,20 +6,20 @@ const char* StackErrorToString(err_t error)
     {
     switch (error)
         {
-        case STK_OK: return "OK";
-        case STK_CALLOC_FAILED: return "in StackCtor calloc return 'NULL'";
-        case STK_REALLOC_FAILED: return "in StackPush realloc return 'NULL'";
-        case STK_BUFFER_NOT_EXSIST: return "BUFFER NOT EXSIST";
-        case STK_CAPACITY_NOT_EXSIST: return "CAPACITY NOT EXSIST";
+        case STK_OK:                   return "OK";
+        case STK_CALLOC_FAILED:        return "in StackCtor calloc return 'NULL'";              //make alignment (est)
+        case STK_REALLOC_FAILED:       return "in StackPush realloc return 'NULL'";
+        case STK_BUFFER_NOT_EXSIST:    return "BUFFER NOT EXSIST";
+        case STK_CAPACITY_NOT_EXSIST:  return "CAPACITY NOT EXSIST";
         case STK_SIZE_LARGER_CAPACITY: return "SIZE LARGER THAN CAPACITY";
-        case STK_EMPTY_STACK: return "EMPTY STACK";
-        case STK_START_CHICK_STK_DIED: return "start chicken stk is died";                //dump is many printfs with absolutely inf of stack                                                                       //and addr of all and
-        case STK_END_CHICK_STK_DIED: return "end chicken stk is died";                    //two HASHs, if hash error, printf error
+        case STK_EMPTY_STACK:          return "EMPTY STACK";
+        case STK_START_CHICK_STK_DIED: return "start chicken stk is died";     //dump is many printfs with absolutely inf of stack                                                                       //and addr of all and
+        case STK_END_CHICK_STK_DIED:   return "end chicken stk is died";       //two HASHs, if hash error, printf error
         case STK_START_CHICK_BUF_DIED: return "start chicken buf is died";
-        case STK_END_CHICK_BUF_DIED: return "end chicken buf is died";
-        case STK_HASH_OF_STK_BROKEN: return "hash of struct stack is broken";
-        case STK_HASH_OF_BUF_BROKEN: return "hash of buffer is broken";
-        default: return "UNKNOWN ERROR";
+        case STK_END_CHICK_BUF_DIED:   return "end chicken buf is died";
+        case STK_HASH_OF_STK_BROKEN:   return "hash of struct stack is broken";
+        case STK_HASH_OF_BUF_BROKEN:   return "hash of buffer is broken";
+        default:                       return "UNKNOWN ERROR";
         }
     }
 
