@@ -19,11 +19,16 @@ int main ()
     err_t error = StackCtor (&stk, 5);
     PrintErrorStack (error, "StackCtor");
 
+    error = StackPush (&stk, 10);
+    PrintErrorStack (error, "StackPush");
 
     error = StackPush (&stk, 20);
     PrintErrorStack (error, "StackPush");
 
     error = StackPush (&stk, 30);
+    PrintErrorStack (error, "StackPush");
+
+    error = StackPush (&stk, 40);
     PrintErrorStack (error, "StackPush");
 
     DBG printf ("Before StackPop: stk->size = %lld\n", stk.size);
@@ -32,7 +37,6 @@ int main ()
 
     error = StackPop (&stk, &elem_from_stack);
     PrintErrorStack (error, "StackPop");
-
 
     DBG printf ("After StackPop: stk->size = %lld\n", stk.size);
     DBG printf ("elemFromStack = %lf\n\n", elem_from_stack);
@@ -123,10 +127,10 @@ err_t HashCount (stack_t* stk)
 [[nodiscard]]
 hash_t HashCounterBuf (const char* buffer, size_t size)
     {
-    hash_t hash = 0;
+    hash_t hash = 5381;
     for (size_t i = 0; i < size; i++)
         {
-        hash += buffer[i];
+        hash = hash * 33 ^ buffer[i];
         }
     return hash;
     }
@@ -231,13 +235,16 @@ err_t StackDump (stack_t* stk)
     printf ("  stk.buffer        = <%p>\n\n", stk->buffer);
 
     printf ("  size_t size       = <%lld>\n", stk->size);
-    printf ("  size_t capacity   = <%lld>\n", stk->capacity);
+    printf ("  size_t capacity   = <%lld>\n\n", stk->capacity);
+
     printf ("  hash_t hashBuf    = <%llu>\n", stk->hashBuf);
-    printf ("  hash_t hashStk    = <%llu>\n", stk->hashStk);
+    printf ("  hash_t hashStk    = <%llu>\n\n", stk->hashStk);
 
     error = PrintSTK (stk);
     if (error)
         return error;
+
+    printf ("\n");
 
     error = Veryficator (stk);
     if (error)
