@@ -33,6 +33,7 @@ err_t Veryficator (const stack_t* stk)
         return STK_CAPACITY_NOT_EXSIST;
     if (stk->size > stk->capacity)
         return STK_SIZE_LARGER_CAPACITY;
+
 #ifdef USE_CANARIES
     if(stk->chicken_start_stk != ((uint64_t)(stk) ^ HexSpeakFirst))
         return STK_START_CHICK_STK_DIED;

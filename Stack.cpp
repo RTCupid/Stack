@@ -19,13 +19,15 @@ int main ()
     err_t error = StackCtor (&stk, 5);
     PrintErrorStack (error, "StackCtor");
 
+    StackDump (&stk);
+
     error = StackPush (&stk, 10);
     PrintErrorStack (error, "StackPush");
 
     error = StackPush (&stk, 20);
     PrintErrorStack (error, "StackPush");
 
-    stk.buffer = (stack_elem_t*)27447835384;
+    //stk.DATA = (stack_elem_t*)27447835384;
 
     error = StackPush (&stk, 30);
     PrintErrorStack (error, "StackPush");
@@ -133,8 +135,8 @@ hash_t HashCounterStk (const char* stk)
     hash_t hash = 5381;
     for (size_t i = 0; i < SIZE_STK; i++)
         {
-        if (i != indexHashStk)
-            hash = hash * 33 ^ stk[i];
+        if (i < indexStartHashStk || i >= indexEndHashStk)
+            hash = hash * 33 ^ (*((const char*)stk + i));
         }
     return hash;
     }
@@ -209,11 +211,6 @@ err_t StackPop (stack_t* stk, stack_elem_t* elem_from_stack)
 
 err_t StackDump (stack_t* stk)
     {
-
-    err_t error = Veryficator (stk);
-    if (error)
-        return error;
-
     printf ("Stack Dump:\n");
 #ifdef USE_CANARIES
     printf ("  chicken_start_stk = <%llu>\n", stk->chicken_start_stk);
@@ -234,11 +231,7 @@ err_t StackDump (stack_t* stk)
     printf ("  hash_t hashStk    = <%llu>\n\n", stk->hashStk);
 #endif
 
-    error = PrintSTK (stk);
-    if (error)
-        return error;
-
-    error = Veryficator (stk);
+    err_t error = PrintSTK (stk);
     if (error)
         return error;
     return STK_OK;

@@ -27,15 +27,15 @@ const stack_elem_t NOT_AN_ELEMENT = NAN;                                       /
 
 const double startElem = 10;
 
-const size_t nElemStructStk = 8;
-
-const size_t indexHashStk = 6;
-
 const uint64_t HexSpeakFirst  = 0x0BEDDEDA0BEDDEDA;
 
 const uint64_t HexSpeakSecond = 0xDEDDEDDEDDEDDEDD;
 
 const size_t SIZE_STK = 2 * sizeof (uint64_t) + 2 * sizeof (hash_t) + 2 * sizeof (size_t) + 2 * sizeof (stack_elem_t*);
+
+
+const size_t indexStartHashStk = sizeof (uint64_t) + 2 * sizeof (stack_elem_t*) + 2 * sizeof (size_t) + sizeof (hash_t);
+const size_t indexEndHashStk   = sizeof (uint64_t) + 2 * sizeof (stack_elem_t*) + 2 * sizeof (size_t) + sizeof (hash_t) * 2;
 
 struct stack_t {
                 uint64_t chicken_start_stk;
