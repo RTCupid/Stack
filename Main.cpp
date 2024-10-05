@@ -6,7 +6,7 @@ int main ()
     printf ("# (c) RTCupid, 2024\n\n");
 
     stack_t stk = {};
-    StackCtor (&stk, 4);
+    //StackCtor (&stk, 4);
 
     printf ("# End of programm");
     return 0;
