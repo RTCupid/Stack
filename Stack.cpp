@@ -219,8 +219,13 @@ err_t StackDump (stack_t* stk)
 
 err_t PrintSTK (stack_t* stk)
     {
-    for (int i = (int)stk->size - 1; i >= 0; i--)
-        printf ("  buffer[%d] = <%lf>\n", i, stk->buffer[i]);
+    for (int i = (int)stk->capacity - 1; i >= 0; i--)
+        {
+        printf ("  buffer[%d] = <%lf> ", i, stk->buffer[i]);
+        if (stk->buffer[i] == POISON)
+            printf ("(POISON)");
+        printf ("\n");
+        }
                          //TODO: buffer[10] = 13979173918 (POISON)
     printf ("\n");
     return STK_OK;

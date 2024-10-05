@@ -27,7 +27,7 @@ const stack_elem_t NOT_AN_ELEMENT = NAN;                                       /
 
 const double startElem = 10;
 
-const double POISON = -66667.76666;
+const stack_elem_t POISON = -666667.766666;
 
 const uint64_t HEX_SPEAK_FIRST  = 0x0BEDDEDA0BEDDEDA;
 
