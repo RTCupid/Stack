@@ -4,40 +4,19 @@ int main ()
     {
     printf ("# Work with Stack\n");
     printf ("# (c) RTCupid, 2024\n\n");
-                          // typedef for struct (est)
-    stack_t stk = {};     // = {} init all 0 (est)
 
-    stack_elem_t elem_from_stack = NOT_AN_ELEMENT;
+    stack_t stk = {};
 
-    err_t error = StackCtor (&stk, 5);
-    PrintErrorStack (error, "StackCtor");
+    stk.data = NULL;
 
-    StackDump (&stk);
+    StackCtor (&stk, 4);
 
-    error = StackPush (&stk, 10);
-    PrintErrorStack (error, "StackPush");
+    stk.data = NULL;
 
-    error = StackPush (&stk, 20);
-    PrintErrorStack (error, "StackPush");
-
-    error = StackPush (&stk, 30);
-    PrintErrorStack (error, "StackPush");
-
-    error = StackPush (&stk, 40);
-    PrintErrorStack (error, "StackPush");
+    stack_elem_t elem = 0;
+    StackPop (&stk, &elem);
 
     StackDump (&stk);
-
-    error = StackPop (&stk, &elem_from_stack);
-    PrintErrorStack (error, "StackPop");
-
-    error = StackPop (&stk, &elem_from_stack);
-    PrintErrorStack (error, "StackPop");
-
-    error = StackDtor (&stk);
-    PrintErrorStack (error, "StackDtor");
-
-    printf ("# Stack is destroyed\n");
 
     printf ("# End of programm");
     return 0;

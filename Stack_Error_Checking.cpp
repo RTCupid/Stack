@@ -7,6 +7,7 @@ const char* StackErrorToString(err_t error)
     switch (error)
         {
         case STK_OK:                   return "OK";
+        case STK_NOT_EXSIST:           return "STK not exsist (ptr == NULL)";
         case STK_CALLOC_FAILED:        return "in StackCtor calloc return 'NULL'";              //make alignment (est)
         case STK_REALLOC_FAILED:       return "in StackPush realloc return 'NULL'";
         case STK_BUFFER_NOT_EXSIST:    return "BUFFER NOT EXSIST";
@@ -27,6 +28,8 @@ const char* StackErrorToString(err_t error)
 
 err_t Veryficator (const stack_t* stk)
     {
+    if (stk == NULL)
+        return STK_NOT_EXSIST;
 #ifdef USE_HASH
     if (stk->hashStk != HashCounterStk ((const char*)(stk)))
         return STK_HASH_OF_STK_BROKEN;

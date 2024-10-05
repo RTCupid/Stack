@@ -10,6 +10,7 @@
 enum err_t {                                                                          // enum err_t
     STK_OK = 0,
     STK_CALLOC_FAILED = 1,
+    STK_NOT_EXSIST,
     STK_BUFFER_NOT_EXSIST,                                                     // not enough memory to create stack data
     STK_REALLOC_FAILED,
     STK_CAPACITY_NOT_EXSIST,
