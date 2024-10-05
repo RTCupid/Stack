@@ -21,7 +21,9 @@ enum err_t {                                                                    
     STK_START_CHICK_BUF_DIED,
     STK_END_CHICK_BUF_DIED,
     STK_HASH_OF_STK_BROKEN,
-    STK_HASH_OF_BUF_BROKEN
+    STK_HASH_OF_BUF_BROKEN,
+    INVALID_POINTER,
+    STK_STACKCTOR_AGAIN
 };
 
 const stack_elem_t NOT_AN_ELEMENT = NAN;                                       // = NAN for stack_elem_t = double

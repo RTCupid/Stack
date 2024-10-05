@@ -4,6 +4,11 @@
 [[nodiscard]]
 err_t StackCtor (stack_t* stk, size_t startCapacity)
     {
+    if (stk->buffer != NULL)
+        {
+        return STK_STACKCTOR_AGAIN;
+        }
+
 #ifdef USE_CANARIES
     stk->data = (stack_elem_t*)calloc (startCapacity + 2, sizeof (stack_elem_t));
                          // залить poison (est)
@@ -134,7 +139,13 @@ err_t StackPush (stack_t* stk, stack_elem_t elem)
 [[nodiscard]]
 err_t StackPop (stack_t* stk, stack_elem_t* elem_from_stack)
     {
+    if (elem_from_stack == NULL)
+        return INVALID_POINTER;
+
     StackAssert (stk, "StackPop");
+
+    if (stk->size == 0)
+        return STK_EMPTY_STACK;
 
     if (stk->size *  SIZE_CHANGE_FACTOR < stk->capacity)
         {
@@ -169,87 +180,19 @@ err_t StackPop (stack_t* stk, stack_elem_t* elem_from_stack)
     return STK_OK;
     }
 
-//Input all info about stack...................................................
-
-err_t StackDump (stack_t* stk)
-    {
-                         //todo cool storage of errors
-    // int errors = 0;
-    // //000000001 = 1
-    // //000000010 = 2
-    // if ()
-    // {
-    //     errors = errors | 1;
-    // }
-    // //10101010
-    // if(errors & 2)
-    // {
-    //     printf()
-    // }
-
-    printf ("Stack Dump:\n");
-#ifdef USE_CANARIES
-    printf ("  chicken_start_stk = <%llu>\n", stk->chicken_start_stk);
-    printf ("  chicken_end_stk   = <%llu>\n\n", stk->chicken_end_stk);
-
-    printf ("  &stk.DATA         = <%p>\n", &stk->data);
-    printf ("  stk.DATA          = <%p>\n\n", stk->data);
-#endif
-
-    printf ("  &stk.buffer       = <%p>\n", &stk->buffer);
-    printf ("  stk.buffer        = <%p>\n\n", stk->buffer);
-
-    printf ("  size_t size       = <%lld>\n", stk->size);
-    printf ("  size_t capacity   = <%lld>\n\n", stk->capacity);
-
-#ifdef USE_HASH
-    printf ("  hash_t hashBuf    = <%llu>\n", stk->hashBuf);
-    printf ("  hash_t hashStk    = <%llu>\n\n", stk->hashStk);
-#endif
-
-    PrintSTK (stk);
-
-    return STK_OK;
-    }
-
-//Print all elem of stack......................................................
-
-err_t PrintSTK (stack_t* stk)
-    {
-    for (int i = (int)stk->capacity - 1; i >= 0; i--)
-        {
-        printf ("  buffer[%d] = <%lf> ", i, stk->buffer[i]);
-        if (stk->buffer[i] == POISON)
-            printf ("(POISON)");
-        printf ("\n");
-        }
-                         // buffer[10] = 13979173918 (POISON) (est)
-    printf ("\n");
-    return STK_OK;
-    }
-
 //Destroy stack................................................................
 
 err_t StackDtor (stack_t* stk)
     {
+    if (stk == NULL)
+        return INVALID_POINTER;
+
+    StackAssert (stk, "StackPush");
+
     free (stk->data);
     stk->data = NULL;
     stk->buffer = NULL;
     printf ("# Stack Destroy\n");
-    return STK_OK;
-    }
-
-// StackAssert.................................................................
-
-err_t StackAssert (stack_t* stk, const char* namefnc)
-    {
-    err_t error = Veryficator (stk);
-    if (error)
-        {
-        StackDump (stk);
-        PrintErrorStack (error, namefnc);
-        assert (0);
-        }
     return STK_OK;
     }
 
