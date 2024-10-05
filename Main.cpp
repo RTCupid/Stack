@@ -7,11 +7,7 @@ int main ()
 
     stack_t stk = {};
 
-    stk.data = NULL;
-
     StackCtor (&stk, 4);
-
-    stk.data = NULL;
 
     stack_elem_t elem = 0;
     StackPop (&stk, &elem);
