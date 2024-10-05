@@ -226,7 +226,7 @@ err_t PrintSTK (stack_t* stk)
             printf ("(POISON)");
         printf ("\n");
         }
-                         //TODO: buffer[10] = 13979173918 (POISON)
+                         // buffer[10] = 13979173918 (POISON) (est)
     printf ("\n");
     return STK_OK;
     }
