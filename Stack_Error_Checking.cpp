@@ -35,13 +35,13 @@ err_t Veryficator (const stack_t* stk)
 #endif
 
 #ifdef USE_CANARIES
-    if(stk->chicken_start_stk != ((uint64_t)(stk) ^ HexSpeakFirst))
+    if(stk->chicken_start_stk != ((uint64_t)(stk) ^ HEX_SPEAK_FIRST))
         return STK_START_CHICK_STK_DIED;
-    if(stk->chicken_end_stk  != ((uint64_t)(stk) ^ HexSpeakSecond))
+    if(stk->chicken_end_stk  != ((uint64_t)(stk) ^ HEX_SPEAK_SECOND))
         return STK_END_CHICK_STK_DIED;
-    if (*((uint64_t*)(stk->DATA)) != ((uint64_t)(stk) ^ HexSpeakFirst))
+    if (*((uint64_t*)(stk->DATA)) != ((uint64_t)(stk) ^ HEX_SPEAK_FIRST))
         return STK_START_CHICK_BUF_DIED;
-    if (*((uint64_t*)(stk->DATA + stk->capacity + 1)) != ((uint64_t)(stk) ^ HexSpeakSecond))
+    if (*((uint64_t*)(stk->DATA + stk->capacity + 1)) != ((uint64_t)(stk) ^ HEX_SPEAK_SECOND))
         return STK_END_CHICK_BUF_DIED;
 #endif
 

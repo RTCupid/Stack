@@ -2,17 +2,10 @@
 
 int main ()
     {
-    printf ("# Program for Solve Square Equation\n");
+    printf ("# Work with Stack\n");
     printf ("# (c) RTCupid, 2024\n\n");
-//TODO: typedef for struct
-    struct stack_t stk = {0,
-                          NULL,
-                          NULL,
-                          0,
-                          0,
-                          0,
-                          0,
-                          0};//TODO: = {} init all 0
+                          // typedef for struct (est)
+    stack_t stk = {};     // = {} init all 0 (est)
 
     stack_elem_t elem_from_stack = NOT_AN_ELEMENT;
 
@@ -45,8 +38,8 @@ int main ()
     error = StackDtor (&stk);
     PrintErrorStack (error, "StackDtor");
 
-    printf ("#Stack is destroyed\n");
+    printf ("# Stack is destroyed\n");
 
-    printf ("#End of programm");
+    printf ("# End of programm");
     return 0;
     }

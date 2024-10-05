@@ -3,8 +3,7 @@
 // make stack..................................................................
 [[nodiscard]]
 err_t StackCtor (stack_t* stk, size_t startCapacity)
-{
-    err_t error = STK_OK;
+    {
 #ifdef USE_CANARIES
     stk->DATA = (stack_elem_t*)calloc (startCapacity + 2, sizeof (stack_elem_t));
     //TODO: залить poison
@@ -28,34 +27,30 @@ err_t StackCtor (stack_t* stk, size_t startCapacity)
 
 #ifdef USE_HASH
     HashCount (stk);
-    if (error)
-        return error;
 #endif
-//todo verify
-    error = Veryficator (stk);
-    if (error)
-        return error;
+                         // verify (est)
+    StackAssert (stk);
 
     return STK_OK;
     }
 
 //.............................................................................
-[[nodiscard]]
+
 err_t CookChicken (stack_t* stk)
     {
-    *(uint64_t*)(&stk->chicken_start_stk) = ((uint64_t)(stk) ^ HexSpeakFirst);
+    *(uint64_t*)(&stk->chicken_start_stk) = ((uint64_t)(stk) ^ HEX_SPEAK_FIRST);
 
-    *(uint64_t*)(&stk->chicken_end_stk)  = ((uint64_t)(stk) ^ HexSpeakSecond);
+    *(uint64_t*)(&stk->chicken_end_stk)  = ((uint64_t)(stk) ^ HEX_SPEAK_SECOND);
 
-    *((uint64_t*)(stk->DATA)) = (uint64_t)(stk) ^ HexSpeakFirst;
+    *((uint64_t*)(stk->DATA)) = (uint64_t)(stk) ^ HEX_SPEAK_FIRST;
 
-    *((uint64_t*)(stk->DATA + stk->capacity + 1)) = (uint64_t)(stk) ^ HexSpeakSecond;
+    *((uint64_t*)(stk->DATA + stk->capacity + 1)) = (uint64_t)(stk) ^ HEX_SPEAK_SECOND;
 
     return STK_OK;
     }
 
 //function count hash stk and buf..............................................
-[[nodiscard]]
+
 err_t HashCount (stack_t* stk)
     {
     stk->hashBuf = HashCounterBuf ((const char*)(stk->buffer), stk->size);
@@ -93,12 +88,7 @@ hash_t HashCounterStk (const char* stk)
 err_t StackPush (stack_t* stk, stack_elem_t elem)
     {
     //todo:
-    err_t error = Veryficator (stk);
-    if (error)
-    {
-        //dump(stk, error);
-        //assert(0);
-    }
+    StackAssert (stk);
 
     if (stk->size == stk->capacity)
         {
@@ -111,9 +101,7 @@ err_t StackPush (stack_t* stk, stack_elem_t elem)
         stk->capacity *= 2;
 
 #ifdef USE_CANARIES
-        error = CookChicken (stk);                                           // make canary (or chicken)
-        if (error)
-            return error;
+        CookChicken (stk);                                           // make canary (or chicken)
 #endif
         }
 
@@ -122,14 +110,10 @@ err_t StackPush (stack_t* stk, stack_elem_t elem)
     stk->size++;
 
 #ifdef USE_HASH
-    error = HashCount (stk);
-    if (error)
-        return error;
+    HashCount (stk);
 #endif
 
-    error = Veryficator (stk);
-    if (error)
-        return error;
+    StackAssert (stk);
 
     return STK_OK;
     }
@@ -138,25 +122,21 @@ err_t StackPush (stack_t* stk, stack_elem_t elem)
 [[nodiscard]]
 err_t StackPop (stack_t* stk, stack_elem_t* elem_from_stack)
     {
-    err_t error = Veryficator (stk);
-    if (error)
-        return error;
+    StackAssert (stk);
+
     if (stk->size == 0)
         return STK_EMPTY_STACK;
 
     stk->size--;
     *elem_from_stack = stk->buffer[stk->size];
 
-//todo realloc below
+                         //todo realloc below
 #ifdef USE_HASH
-    error = HashCount (stk);
-    if (error)
-        return error;
+    HashCount (stk);
 #endif
 
-    error = Veryficator (stk);
-    if (error)
-        return error;
+    StackAssert (stk);
+
     return STK_OK;
     }
 
@@ -164,7 +144,7 @@ err_t StackPop (stack_t* stk, stack_elem_t* elem_from_stack)
 
 err_t StackDump (stack_t* stk)
     {
-    //todo cool storage of errors
+                         //todo cool storage of errors
     // int errors = 0;
     // //000000001 = 1
     // //000000010 = 2
@@ -198,9 +178,8 @@ err_t StackDump (stack_t* stk)
     printf ("  hash_t hashStk    = <%llu>\n\n", stk->hashStk);
 #endif
 
-    err_t error = PrintSTK (stk);
-    if (error)
-        return error;
+    PrintSTK (stk);
+
     return STK_OK;
     }
 
@@ -210,7 +189,7 @@ err_t PrintSTK (stack_t* stk)
     {
     for (int i = (int)stk->size - 1; i >= 0; i--)
         printf ("  buffer[%d] = <%lf>\n", i, stk->buffer[i]);
-    //TODO: buffer[10] = 13979173918 (POISON)
+                         //TODO: buffer[10] = 13979173918 (POISON)
     printf ("\n");
     return STK_OK;
     }
@@ -220,12 +199,21 @@ err_t PrintSTK (stack_t* stk)
 err_t StackDtor (stack_t* stk)
     {
     //verify
-    err_t error = Veryficator (stk);
-    if (error)
-        return error;
+    StackAssert (stk);
 
     free (stk->DATA);
     stk->DATA = NULL;
     stk->buffer = NULL;
+    return STK_OK;
+    }
+
+err_t StackAssert (stack_t* stk)
+    {
+    err_t error = Veryficator (stk);
+    if (error)
+        {
+        StackDump (stk);
+        assert (0);
+        }
     return STK_OK;
     }
