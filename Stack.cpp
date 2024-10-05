@@ -98,6 +98,9 @@ hash_t HashCounterStk (const char* stk)
 [[nodiscard]]
 err_t StackPush (stack_t* stk, stack_elem_t elem)
     {
+    if (stk == NULL)
+        return INVALID_POINTER;
+
     StackAssert (stk, "StackPush");
 
     if (stk->size == stk->capacity)

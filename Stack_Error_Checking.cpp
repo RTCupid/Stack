@@ -66,7 +66,7 @@ const char* StackErrorToString(err_t error)
     switch (error)
         {
         case STK_OK:                   return "OK";
-        case STK_NOT_EXSIST:           return "STK not exsist";
+        case STK_NOT_EXSIST:           return "Stack not exsist";
         case STK_CALLOC_FAILED:        return "in StackCtor calloc return 'NULL'";              //make alignment (est)
         case STK_STACKCTOR_AGAIN:      return "Stack is already construction";
         case STK_REALLOC_FAILED:       return "in StackPush realloc return 'NULL'";

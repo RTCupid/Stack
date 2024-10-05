@@ -8,12 +8,9 @@ int main ()
     stack_t stk = {};
     StackCtor (&stk, 4);
 
+    StackPush (nullptr, 1);
 
-    StackPush (&stk, 1);
-
-
-    err_t error = StackDump (nullptr);
-    PrintErrorStack (error, "StackDump");
+    StackDump (&stk);
 
     printf ("# End of programm");
     return 0;
