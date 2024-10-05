@@ -232,9 +232,6 @@ err_t PrintSTK (stack_t* stk)
 
 err_t StackDtor (stack_t* stk)
     {
-    //verify
-    StackAssert (stk, "StackDtor");
-
     free (stk->data);
     stk->data = NULL;
     stk->buffer = NULL;
