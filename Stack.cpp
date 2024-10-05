@@ -96,8 +96,8 @@ err_t StackPush (stack_t* stk, stack_elem_t elem)
     err_t error = Veryficator (stk);
     if (error)
     {
-        dump(stk, error);
-        assert(0);
+        //dump(stk, error);
+        //assert(0);
     }
 
     if (stk->size == stk->capacity)

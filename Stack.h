@@ -49,7 +49,7 @@ struct stack_t {
     uint64_t chicken_end_stk;
 };
 
-#def
+//#def
 
 //typedef struct abc {...} abc_t;
 err_t CookChicken (stack_t* stk);
