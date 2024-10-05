@@ -40,7 +40,7 @@ const size_t indexEndHashStk   = sizeof (uint64_t) + 2 * sizeof (stack_elem_t*) 
                          //struct  typedef "stack_t" (est) K&R read
 typedef struct {
     uint64_t chicken_start_stk;
-    stack_elem_t* DATA;
+    stack_elem_t* data;
     stack_elem_t* buffer;
     size_t size;
     size_t capacity;

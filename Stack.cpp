@@ -5,16 +5,20 @@
 err_t StackCtor (stack_t* stk, size_t startCapacity)
     {
 #ifdef USE_CANARIES
-    stk->DATA = (stack_elem_t*)calloc (startCapacity + 2, sizeof (stack_elem_t));
+    stk->data = (stack_elem_t*)calloc (startCapacity + 2, sizeof (stack_elem_t));
     //TODO: залить poison
-    if (stk->DATA == NULL)
+    if (stk->data == NULL)
     {
         return STK_CALLOC_FAILED;
     }
 //todo check return value of std function
-    stk->buffer = (stack_elem_t*)((char*)stk->DATA + 1 * sizeof (stack_elem_t));
+    stk->buffer = (stack_elem_t*)((char*)stk->data + 1 * sizeof (stack_elem_t));
 #else
     stk->buffer = (stack_elem_t*)calloc (startCapacity, sizeof (stack_elem_t));
+    if (stk->buffer == NULL)
+    {
+        return STK_CALLOC_FAILED;
+    }
 #endif
 
     stk->size = 0;
@@ -42,9 +46,9 @@ err_t CookChicken (stack_t* stk)
 
     *(uint64_t*)(&stk->chicken_end_stk)  = ((uint64_t)(stk) ^ HEX_SPEAK_SECOND);
 
-    *((uint64_t*)(stk->DATA)) = (uint64_t)(stk) ^ HEX_SPEAK_FIRST;
+    *((uint64_t*)(stk->data)) = (uint64_t)(stk) ^ HEX_SPEAK_FIRST;
 
-    *((uint64_t*)(stk->DATA + stk->capacity + 1)) = (uint64_t)(stk) ^ HEX_SPEAK_SECOND;
+    *((uint64_t*)(stk->data + stk->capacity + 1)) = (uint64_t)(stk) ^ HEX_SPEAK_SECOND;
 
     return STK_OK;
     }
@@ -93,8 +97,8 @@ err_t StackPush (stack_t* stk, stack_elem_t elem)
     if (stk->size == stk->capacity)
         {
         //todo:remove magic number
-        stk->DATA = (stack_elem_t*)realloc (stk->DATA, (stk->capacity * 2 + 2) * sizeof (stack_elem_t));   //sizeof (est)
-        if (stk->DATA == NULL)
+        stk->data = (stack_elem_t*)realloc (stk->data, (stk->capacity * 2 + 2) * sizeof (stack_elem_t));   //sizeof (est)
+        if (stk->data == NULL)
             {
             return STK_REALLOC_FAILED;
             }
@@ -163,8 +167,8 @@ err_t StackDump (stack_t* stk)
     printf ("  chicken_start_stk = <%llu>\n", stk->chicken_start_stk);
     printf ("  chicken_end_stk   = <%llu>\n\n", stk->chicken_end_stk);
 
-    printf ("  &stk.DATA         = <%p>\n", &stk->DATA);
-    printf ("  stk.DATA          = <%p>\n\n", stk->DATA);
+    printf ("  &stk.DATA         = <%p>\n", &stk->data);
+    printf ("  stk.DATA          = <%p>\n\n", stk->data);
 #endif
 
     printf ("  &stk.buffer       = <%p>\n", &stk->buffer);
@@ -201,8 +205,8 @@ err_t StackDtor (stack_t* stk)
     //verify
     StackAssert (stk);
 
-    free (stk->DATA);
-    stk->DATA = NULL;
+    free (stk->data);
+    stk->data = NULL;
     stk->buffer = NULL;
     return STK_OK;
     }
