@@ -8,10 +8,6 @@ int main ()
     stack_t stk = {};
     StackCtor (&stk, 4);
 
-    StackPush (nullptr, 1);
-
-    StackDump (&stk);
-
     printf ("# End of programm");
     return 0;
     }
