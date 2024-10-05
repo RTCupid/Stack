@@ -20,7 +20,6 @@ int main ()
     error = StackPush (&stk, 20);
     PrintErrorStack (error, "StackPush");
 
-
     error = StackPush (&stk, 30);
     PrintErrorStack (error, "StackPush");
 

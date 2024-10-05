@@ -6,12 +6,12 @@ err_t StackCtor (stack_t* stk, size_t startCapacity)
     {
 #ifdef USE_CANARIES
     stk->data = (stack_elem_t*)calloc (startCapacity + 2, sizeof (stack_elem_t));
-    //TODO: залить poison
+                         // залить poison (est)
     if (stk->data == NULL)
     {
         return STK_CALLOC_FAILED;
     }
-//todo check return value of std function
+                         // check return value of std function (est)
     stk->buffer = (stack_elem_t*)((char*)stk->data + 1 * sizeof (stack_elem_t));
 #else
     stk->buffer = (stack_elem_t*)calloc (startCapacity, sizeof (stack_elem_t));
@@ -25,6 +25,8 @@ err_t StackCtor (stack_t* stk, size_t startCapacity)
 
     stk->capacity = startCapacity;
 
+    MakePoison (stk);
+
 #ifdef USE_CANARIES
     CookChicken (stk);                                           // make canary (or chicken)
 #endif
@@ -33,7 +35,7 @@ err_t StackCtor (stack_t* stk, size_t startCapacity)
     HashCount (stk);
 #endif
                          // verify (est)
-    StackAssert (stk);
+    StackAssert (stk, "StackAssert");
 
     return STK_OK;
     }
@@ -91,18 +93,24 @@ hash_t HashCounterStk (const char* stk)
 [[nodiscard]]
 err_t StackPush (stack_t* stk, stack_elem_t elem)
     {
-    //todo:
-    StackAssert (stk);
+    StackAssert (stk, "StackPush");
 
     if (stk->size == stk->capacity)
         {
-        //todo:remove magic number
-        stk->data = (stack_elem_t*)realloc (stk->data, (stk->capacity * 2 + 2) * sizeof (stack_elem_t));   //sizeof (est)
+#ifdef USE_CANARIES
+        stk->data = (stack_elem_t*)realloc (stk->data, (stk->capacity * SIZE_CHANGE_FACTOR + 2) * sizeof (stack_elem_t));   //sizeof (est)
         if (stk->data == NULL)
             {
             return STK_REALLOC_FAILED;
             }
-        stk->capacity *= 2;
+
+        stk->buffer = (stack_elem_t*)((char*)stk->data + 1 * sizeof (stack_elem_t));
+#else
+        stk->buffer = (stack_elem_t*)realloc (stk->buffer, (stk->capacity * SIZE_CHANGE_FACTOR) * sizeof (stack_elem_t));
+#endif
+        stk->capacity *= SIZE_CHANGE_FACTOR;
+
+        MakePoison (stk);
 
 #ifdef USE_CANARIES
         CookChicken (stk);                                           // make canary (or chicken)
@@ -117,7 +125,7 @@ err_t StackPush (stack_t* stk, stack_elem_t elem)
     HashCount (stk);
 #endif
 
-    StackAssert (stk);
+    StackAssert (stk, "StackPush");
 
     return STK_OK;
     }
@@ -126,20 +134,40 @@ err_t StackPush (stack_t* stk, stack_elem_t elem)
 [[nodiscard]]
 err_t StackPop (stack_t* stk, stack_elem_t* elem_from_stack)
     {
-    StackAssert (stk);
+    StackAssert (stk, "StackPop");
 
     if (stk->size == 0)
         return STK_EMPTY_STACK;
 
+    if (stk->size *  SIZE_CHANGE_FACTOR < stk->capacity)
+        {
+#ifdef USE_CANARIES
+        stk->data = (stack_elem_t*)realloc (stk->data, (stk->capacity / SIZE_CHANGE_FACTOR + 2) * sizeof (stack_elem_t));   //sizeof (est)
+        if (stk->data == NULL)
+            {
+            return STK_REALLOC_FAILED;
+            }
+
+        stk->buffer = (stack_elem_t*)((char*)stk->data + 1 * sizeof (stack_elem_t));
+#else
+        stk->buffer = (stack_elem_t*)realloc (stk->buffer, (stk->capacity / SIZE_CHANGE_FACTOR) * sizeof (stack_elem_t));
+#endif
+
+        stk->capacity /= SIZE_CHANGE_FACTOR;
+        }
+
     stk->size--;
     *elem_from_stack = stk->buffer[stk->size];
 
-                         //todo realloc below
+#ifdef USE_CANARIES
+        CookChicken (stk);                                           // make canary (or chicken)
+#endif
+
 #ifdef USE_HASH
     HashCount (stk);
 #endif
 
-    StackAssert (stk);
+    StackAssert (stk, "StackPop");
 
     return STK_OK;
     }
@@ -203,7 +231,7 @@ err_t PrintSTK (stack_t* stk)
 err_t StackDtor (stack_t* stk)
     {
     //verify
-    StackAssert (stk);
+    StackAssert (stk, "StackDtor");
 
     free (stk->data);
     stk->data = NULL;
@@ -211,13 +239,25 @@ err_t StackDtor (stack_t* stk)
     return STK_OK;
     }
 
-err_t StackAssert (stack_t* stk)
+// StackAssert.................................................................
+
+err_t StackAssert (stack_t* stk, const char* namefnc)
     {
     err_t error = Veryficator (stk);
     if (error)
         {
         StackDump (stk);
+        PrintErrorStack (error, namefnc);
         assert (0);
         }
+    return STK_OK;
+    }
+
+//Make poison..................................................................
+
+err_t MakePoison (stack_t* stk)
+    {
+    for (size_t i = stk->size; i < stk->capacity; i++)
+        stk->buffer[i] = POISON;
     return STK_OK;
     }

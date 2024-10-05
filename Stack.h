@@ -27,9 +27,13 @@ const stack_elem_t NOT_AN_ELEMENT = NAN;                                       /
 
 const double startElem = 10;
 
+const double POISON = -66667.76666;
+
 const uint64_t HEX_SPEAK_FIRST  = 0x0BEDDEDA0BEDDEDA;
 
 const uint64_t HEX_SPEAK_SECOND = 0xDEDDEDDEDDEDDEDD;
+
+const size_t SIZE_CHANGE_FACTOR = 2;
 
 const size_t SIZE_STK = 2 * sizeof (uint64_t) + 2 * sizeof (hash_t) + 2 * sizeof (size_t) + 2 * sizeof (stack_elem_t*);
 
@@ -76,4 +80,6 @@ err_t StackDump (stack_t* stk);
 
 err_t PrintSTK (stack_t* stk);
 
-err_t StackAssert (stack_t* stk);
+err_t StackAssert (stack_t* stk, const char* namefnc);
+
+err_t MakePoison (stack_t* stk);
