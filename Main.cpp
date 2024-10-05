@@ -6,13 +6,13 @@ int main ()
     printf ("# (c) RTCupid, 2024\n\n");
 
     stack_t stk = {};
-
     StackCtor (&stk, 4);
 
-    stack_elem_t elem = 0;
-    StackPop (&stk, &elem);
+    StackPush (&stk, 40);
+    stack_elem_t a = 0;
+    StackPop (&stk, &a);
 
-    StackDump (&stk);
+    StackDtor (&stk);
 
     printf ("# End of programm");
     return 0;

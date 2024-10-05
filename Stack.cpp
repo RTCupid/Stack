@@ -136,9 +136,6 @@ err_t StackPop (stack_t* stk, stack_elem_t* elem_from_stack)
     {
     StackAssert (stk, "StackPop");
 
-    if (stk->size == 0)
-        return STK_EMPTY_STACK;
-
     if (stk->size *  SIZE_CHANGE_FACTOR < stk->capacity)
         {
 #ifdef USE_CANARIES
@@ -241,6 +238,7 @@ err_t StackDtor (stack_t* stk)
     free (stk->data);
     stk->data = NULL;
     stk->buffer = NULL;
+    printf ("# Stack Destroy\n");
     return STK_OK;
     }
 
