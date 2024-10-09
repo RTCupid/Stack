@@ -1,3 +1,9 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <assert.h>
+#include <cstdint>
+
 #include "Stack.h"
 
 // make stack..................................................................

@@ -4,8 +4,6 @@
 #include <math.h>
 #include <assert.h>
 #include <cstdint>
-
-#include "Config.h"
 #include "Config.h"
 
 enum err_t {                                                                          // enum err_t
