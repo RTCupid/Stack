@@ -7,9 +7,6 @@ int main ()
 
     stack_t stk = {};
 
-    err_t error = StackCtor (&stk, 4);
-    PrintErrorStack (error, "StackCtor");
-
     printf ("# End of programm");
     return 0;
     }
