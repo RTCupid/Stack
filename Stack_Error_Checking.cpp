@@ -67,10 +67,11 @@ const char* StackErrorToString(err_t error)
         {
         case STK_OK:                   return "OK";
         case STK_NOT_EXSIST:           return "Stack not exsist";
+        case STK_DATA_NOT_EXSIST:      return "data of stack not exsist";
+        case STK_BUFFER_NOT_EXSIST:    return "buffer of stack not exsist";
         case STK_CALLOC_FAILED:        return "in StackCtor calloc return 'NULL'";              //make alignment (est)
         case STK_STACKCTOR_AGAIN:      return "Stack is already construction";
         case STK_REALLOC_FAILED:       return "in StackPush realloc return 'NULL'";
-        case STK_BUFFER_NOT_EXSIST:    return "Buffer not Exsist";
         case STK_CAPACITY_NOT_EXSIST:  return "Capacity not Exsist";
         case STK_SIZE_LARGER_CAPACITY: return "Size Larger than Capacity";
         case STK_EMPTY_STACK:          return "Empty Stack";
@@ -91,6 +92,8 @@ err_t Veryficator (const stack_t* stk)
     {
     if (stk == NULL)
         return STK_NOT_EXSIST;
+    if (stk->data == NULL)
+        return STK_DATA_NOT_EXSIST;
     if (stk->buffer == NULL)
         return STK_BUFFER_NOT_EXSIST;
     if (stk->capacity == 0)

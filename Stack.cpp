@@ -4,6 +4,9 @@
 [[nodiscard]]
 err_t StackCtor (stack_t* stk, size_t startCapacity)
     {
+    if (stk == NULL)
+        return STK_NOT_EXSIST;
+
     if (stk->buffer != NULL)
         {
         return STK_STACKCTOR_AGAIN;
@@ -184,6 +187,11 @@ err_t StackPop (stack_t* stk, stack_elem_t* elem_from_stack)
 
 err_t StackDtor (stack_t* stk)
     {
+    if (stk == NULL)
+        return INVALID_POINTER;
+
+    StackAssert (stk, "StackDtor");
+
     free (stk->data);
     stk->data = NULL;
     stk->buffer = NULL;
