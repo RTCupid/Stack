@@ -6,6 +6,7 @@
 #include <cstdint>
 
 #include "Config.h"
+#include "Config.h"
 
 enum err_t {                                                                          // enum err_t
     STK_OK = 0,
@@ -31,7 +32,7 @@ const stack_elem_t NOT_AN_ELEMENT = NAN;                                       /
 
 const double startElem = 10;
 
-const stack_elem_t POISON = -666667.766666;
+const stack_elem_t POISON = -666667.766666;//0x0
 
 const uint64_t HEX_SPEAK_FIRST  = 0x0BEDDEDA0BEDDEDA;
 

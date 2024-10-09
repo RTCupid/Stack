@@ -1,13 +1,15 @@
 CC = g++
+PREFIX_HDR = ./h_file/
+PREFIX_CPP = ./cpp_file/
 a.exe: Stack.o Stack_Error_Checking.o Main.o
 	$(CC) Stack.o Stack_Error_Checking.o Main.o
 
-Stack.o: Stack.cpp Stack.h Config.h
+Stack.o: $(PREFIX_CPP)Stack.cpp (PREFIX_HDR)Stack.h (PREFIX_HDR)Config.h
 	$(CC) -c Stack.cpp -o Stack.o -Wshadow -Winit-self -Wredundant-decls -Wcast-align -Wundef -Wfloat-equal -Winline -Wunreachable-code -Wmissing-declarations -Wmissing-include-dirs -Wswitch-enum -Wswitch-default -Weffc++ -Wmain -Wextra -Wall -g -pipe -fexceptions -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wempty-body -Wformat-security -Wformat=2 -Wignored-qualifiers -Wlogical-op -Wno-missing-field-initializers -Wnon-virtual-dtor -Woverloaded-virtual -Wpointer-arith -Wsign-promo -Wstack-usage=8192 -Wstrict-aliasing -Wstrict-null-sentinel -Wtype-limits -Wwrite-strings -Werror=vla -D_DEBUG -D_EJUDGE_CLIENT_SIDE
 
-Stack_Error_Checking.o: Stack_Error_Checking.cpp Stack.h Config.h
+Stack_Error_Checking.o: Stack_Error_Checking.cpp (PREFIX_HDR)Stack.h (PREFIX_HDR)Config.h
 	$(CC) -c Stack_Error_Checking.cpp -o Stack_Error_Checking.o -Wshadow -Winit-self -Wredundant-decls -Wcast-align -Wundef -Wfloat-equal -Winline -Wunreachable-code -Wmissing-declarations -Wmissing-include-dirs -Wswitch-enum -Wswitch-default -Weffc++ -Wmain -Wextra -Wall -g -pipe -fexceptions -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wempty-body -Wformat-security -Wformat=2 -Wignored-qualifiers -Wlogical-op -Wno-missing-field-initializers -Wnon-virtual-dtor -Woverloaded-virtual -Wpointer-arith -Wsign-promo -Wstack-usage=8192 -Wstrict-aliasing -Wstrict-null-sentinel -Wtype-limits -Wwrite-strings -Werror=vla -D_DEBUG -D_EJUDGE_CLIENT_SIDE
 
-Main.o: Main.cpp Stack.h Config.h
+Main.o: Main.cpp (PREFIX_HDR)Stack.h (PREFIX_HDR)Config.h
 	$(CC) -c Main.cpp -o Main.o -Wshadow -Winit-self -Wredundant-decls -Wcast-align -Wundef -Wfloat-equal -Winline -Wunreachable-code -Wmissing-declarations -Wmissing-include-dirs -Wswitch-enum -Wswitch-default -Weffc++ -Wmain -Wextra -Wall -g -pipe -fexceptions -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wempty-body -Wformat-security -Wformat=2 -Wignored-qualifiers -Wlogical-op -Wno-missing-field-initializers -Wnon-virtual-dtor -Woverloaded-virtual -Wpointer-arith -Wsign-promo -Wstack-usage=8192 -Wstrict-aliasing -Wstrict-null-sentinel -Wtype-limits -Wwrite-strings -Werror=vla -D_DEBUG -D_EJUDGE_CLIENT_SIDE
 
