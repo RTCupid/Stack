@@ -7,7 +7,7 @@
 #include "Stack.h"
 
 // make stack..................................................................
-[[nodiscard]]
+
 err_t StackCtor (stack_t* stk, size_t startCapacity)
     {
     if (stk == NULL)
@@ -55,7 +55,7 @@ err_t StackCtor (stack_t* stk, size_t startCapacity)
     }
 
 //.............................................................................
-
+#ifdef USE_CANARIES
 err_t CookChicken (stack_t* stk)
     {
     *(uint64_t*)(&stk->chicken_start_stk) = ((uint64_t)(stk) ^ HEX_SPEAK_FIRST);
@@ -68,9 +68,9 @@ err_t CookChicken (stack_t* stk)
 
     return STK_OK;
     }
-
+#endif
 //function count hash stk and buf..............................................
-
+#ifdef USE_HASH
 err_t HashCount (stack_t* stk)
     {
     stk->hashBuf = HashCounterBuf ((const char*)(stk->buffer), stk->size);
@@ -102,9 +102,9 @@ hash_t HashCounterStk (const char* stk)
         }
     return hash;
     }
-
+#endif
 //Push elem to stack...........................................................
-[[nodiscard]]
+
 err_t StackPush (stack_t* stk, stack_elem_t elem)
     {
     if (stk == NULL)
@@ -148,13 +148,16 @@ err_t StackPush (stack_t* stk, stack_elem_t elem)
     }
 
 //Pop elem from stack..........................................................
-[[nodiscard]]
+
 err_t StackPop (stack_t* stk, stack_elem_t* elem_from_stack)
     {
     if (elem_from_stack == NULL)
         return INVALID_POINTER;
 
     StackAssert (stk, "StackPop");
+
+    if (stk->size <= 0)
+        return STK_EMPTY_STACK;
 
     if (stk->size *  SIZE_CHANGE_FACTOR < stk->capacity)
         {
@@ -175,6 +178,8 @@ err_t StackPop (stack_t* stk, stack_elem_t* elem_from_stack)
 
     stk->size--;
     *elem_from_stack = stk->buffer[stk->size];
+
+    MakePoison (stk);
 
 #ifdef USE_CANARIES
         CookChicken (stk);                                           // make canary (or chicken)
@@ -198,8 +203,12 @@ err_t StackDtor (stack_t* stk)
 
     StackAssert (stk, "StackDtor");
 
+#ifdef USE_CANARIES
     free (stk->data);
     stk->data = NULL;
+#else
+    free (stk->buffer);
+#endif
     stk->buffer = NULL;
     return STK_OK;
     }

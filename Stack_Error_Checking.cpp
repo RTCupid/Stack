@@ -36,8 +36,8 @@ err_t StackDump (stack_t* stk)
 
     printf ("Stack Dump:\n");
 #ifdef USE_CANARIES
-    printf ("  chicken_start_stk = <%llu>\n", stk->chicken_start_stk);
-    printf ("  chicken_end_stk   = <%llu>\n\n", stk->chicken_end_stk);
+    printf ("  chicken_start_stk = <%lu>\n", stk->chicken_start_stk);
+    printf ("  chicken_end_stk   = <%lu>\n\n", stk->chicken_end_stk);
 
     printf ("  &stk.DATA         = <%p>\n", &stk->data);
     printf ("  stk.DATA          = <%p>\n\n", stk->data);
@@ -46,12 +46,12 @@ err_t StackDump (stack_t* stk)
     printf ("  &stk.buffer       = <%p>\n", &stk->buffer);
     printf ("  stk.buffer        = <%p>\n\n", stk->buffer);
 
-    printf ("  size_t size       = <%lld>\n", stk->size);
-    printf ("  size_t capacity   = <%lld>\n\n", stk->capacity);
+    printf ("  size_t size       = <%lu>\n", stk->size);
+    printf ("  size_t capacity   = <%lu>\n\n", stk->capacity);
 
 #ifdef USE_HASH
-    printf ("  hash_t hashBuf    = <%llu>\n", stk->hashBuf);
-    printf ("  hash_t hashStk    = <%llu>\n\n", stk->hashStk);
+    printf ("  hash_t hashBuf    = <%lu>\n", stk->hashBuf);
+    printf ("  hash_t hashStk    = <%lu>\n\n", stk->hashStk);
 #endif
 
     PrintSTK (stk);
@@ -92,8 +92,10 @@ err_t Veryficator (const stack_t* stk)
     {
     if (stk == NULL)
         return STK_NOT_EXSIST;
+#ifdef USE_CANARIES
     if (stk->data == NULL)
         return STK_DATA_NOT_EXSIST;
+#endif
     if (stk->buffer == NULL)
         return STK_BUFFER_NOT_EXSIST;
     if (stk->capacity == 0)
@@ -137,7 +139,7 @@ err_t PrintSTK (stack_t* stk)
     {
     for (int i = (int)stk->capacity - 1; i >= 0; i--)
         {
-        printf ("  buffer[%d] = <%lf> ", i, stk->buffer[i]);
+        printf ("  buffer[%d] = <%d> ", i, stk->buffer[i]);
         if (stk->buffer[i] == POISON)
             printf ("(POISON)");
         printf ("\n");
